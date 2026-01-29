@@ -1,0 +1,122 @@
+#ifndef HTTP_HPP
+#define HTTP_HPP
+
+#include "http_request.hpp"
+#include "http_response.hpp"
+
+#include <map>
+#include <functional>
+#include <string>
+#include <stdexcept>
+
+namespace http
+{
+    namespace exceptions
+    {
+        class CanNotCreateServer : public std::runtime_error
+        {
+        public:
+            CanNotCreateServer(const std::string &message = "")
+                : std::runtime_error("HTTP: Unable to create server" + (message.empty() ? "" : "\n" + message)) {}
+        };
+
+        class UnableToAddRouteHandler : public std::runtime_error
+        {
+        public:
+            UnableToAddRouteHandler(const std::string &message = "")
+                : std::runtime_error("HTTP: Unable to add route handler" + (message.empty() ? "" : "\n" + message)) {}
+        };
+    }
+
+    struct HttpServerConfig
+    {
+        unsigned short port;
+        unsigned int max_pending_connections;
+        unsigned int max_concurrent_connections;
+        time_t inactive_connection_timeout;
+        bool external_logging;
+    };
+    class HttpConnection;
+
+    /// @brief A simple HTTP server.
+    class HttpServer
+    {
+    private:
+        /// @brief Pointer to incomplete implementation to abstract away underlying details.
+        struct Impl;
+        /// @brief Pointer to the implementation.
+        Impl *pimpl;
+        HttpServerConfig config;
+        std::map<int, HttpConnection> connections;
+        std::map<std::pair<std::string, std::string>, std::function<void(const http::HttpRequest &, http::HttpResponse &)>> route_handlers;
+        std::string get_ip();
+        unsigned short get_port();
+        void log_info(const std::string &message);
+        void log_warning(const std::string &message);
+        void log_error(const std::string &message);
+        void check_and_remove_inactive_connections();
+        void accept_new_connections();
+
+    public:
+        /// @brief Opens an HTTP/1.1 on the specified port. Over TCP.
+        /// @param config Configuration for the HTTP server.
+        /// @throws http::exceptions::CanNotCreateServer if the server cannot be created.
+        explicit HttpServer(HttpServerConfig config);
+
+        HttpServer(const HttpServer &) = delete;
+        HttpServer &operator=(const HttpServer &) = delete;
+
+        HttpServer(HttpServer &&) = default;
+        HttpServer &operator=(HttpServer &&) = default;
+
+        ~HttpServer();
+
+        /// @brief Starts the server to listen for incoming requests.
+        void start();
+        /// @brief Adds a route handler for the specified HTTP method and path.
+        /// @param method Http method (e.g., "GET", "POST"). Method names are case-sensitive.
+        /// @param path URL path (e.g., "/api/data"). Path is case-sensitive.
+        /// @param handler Accepts a callback function that takes an http::HttpRequest and http::HttpResponse as parameters.
+        void add_route_handler(const std::string method, const std::string path,
+                               const std::function<void(const http::HttpRequest &, http::HttpResponse &)> handler);
+    };
+}
+#endif // HTTP_HPP
+
+/*
+A simple implementation of an HTTP server using this library:
+#include "http.hpp"
+#include <iostream>
+#include <string>
+#include <vector>
+
+int main()
+{
+    try
+    {
+        http::HttpServerConfig config{port: 8080, max_pending_connections: 100 ,max_concurrent_connections:100 ,external_logging:false, inactive_connection_timeout: 60};
+        http::HttpServer server(config);
+
+        server.add_route_handler("GET", "/hello", [](const http::HttpRequest &req, http::HttpResponse &res) {
+            res.set_status_code(200);
+            res.set_status_message("OK");
+            res.add_header("Content-Type", "text/plain");
+            std::string body = "Hello, World!";
+            res.set_body(std::vector<char>(body.begin(), body.end()));
+        });
+
+        server.start();
+    }
+    catch (const http::exceptions::CanNotCreateServer &e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return 1;
+    }
+    catch(...)
+    {
+        std::cerr << "An unexpected error occurred." << std::endl;
+        return 1;
+    }
+    return 0;
+}
+*/
