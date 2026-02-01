@@ -13,6 +13,15 @@ namespace enderman
         virtual void parse_from(const std::vector<char> &body) = 0;
         virtual std::vector<char> serialize() const = 0;
         virtual const std::string &type() const = 0;
+        template <typename T>
+        T &as(Body &body)
+        {
+            if (body.type() == T::TYPE)
+            {
+                return static_cast<T &>(body);
+            }
+            throw std::bad_cast();
+        }
     };
 
     class RawBody : public Body
@@ -34,15 +43,6 @@ namespace enderman
         const std::string &type() const override { return std::string(TYPE); }
     };
 
-    template <typename T>
-    T &get_body_as(Body &body)
-    {
-        if (body.type() == T::TYPE)
-        {
-            return static_cast<T &>(body);
-        }
-        throw std::bad_cast();
-    }
 }
 
 #endif // ENDERMAN_BODY_HPP
