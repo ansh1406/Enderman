@@ -10,9 +10,6 @@
 
 namespace enderman
 {
-    class Request;
-    class Response;
-
     struct RouteHandler
     {
         std::vector<std::string> path;

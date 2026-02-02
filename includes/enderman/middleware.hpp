@@ -11,9 +11,6 @@
 
 namespace enderman
 {
-    class Request;
-    class Response;
-
     struct Middleware
     {
         std::vector<std::string> path;
