@@ -95,3 +95,53 @@ void enderman::Enderman::post(const std::vector<std::string> &paths, RouteHandle
 {
     on(enderman::HttpMethod::POST, paths, std::move(handler));
 }
+
+void enderman::Enderman::put(const std::string &path, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::PUT, path, std::move(handler));
+}
+
+void enderman::Enderman::put(const std::vector<std::string> &paths, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::PUT, paths, std::move(handler));
+}
+
+void enderman::Enderman::del(const std::string &path, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::DELETE, path, std::move(handler));
+}
+
+void enderman::Enderman::del(const std::vector<std::string> &paths, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::DELETE, paths, std::move(handler));
+}
+
+void enderman::Enderman::patch(const std::string &path, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::PATCH, path, std::move(handler));
+}
+
+void enderman::Enderman::patch(const std::vector<std::string> &paths, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::PATCH, paths, std::move(handler));
+}
+
+void enderman::Enderman::options(const std::string &path, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::OPTIONS, path, std::move(handler));
+}
+
+void enderman::Enderman::options(const std::vector<std::string> &paths, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::OPTIONS, paths, std::move(handler));
+}
+
+void enderman::Enderman::head(const std::string &path, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::HEAD, path, std::move(handler));
+}
+
+void enderman::Enderman::head(const std::vector<std::string> &paths, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::HEAD, paths, std::move(handler));
+}

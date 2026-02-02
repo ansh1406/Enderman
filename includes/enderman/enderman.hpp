@@ -35,6 +35,21 @@ namespace enderman
 
         void post(const std::string &path, RouteHandlerFunction handler);
         void post(const std::vector<std::string> &paths, RouteHandlerFunction handler);
+
+        void put(const std::string &path, RouteHandlerFunction handler);
+        void put(const std::vector<std::string> &paths, RouteHandlerFunction handler);
+
+        void del(const std::string &path, RouteHandlerFunction handler);
+        void del(const std::vector<std::string> &paths, RouteHandlerFunction handler);
+
+        void patch(const std::string &path, RouteHandlerFunction handler);
+        void patch(const std::vector<std::string> &paths, RouteHandlerFunction handler);
+
+        void options(const std::string &path, RouteHandlerFunction handler);
+        void options(const std::vector<std::string> &paths, RouteHandlerFunction handler);
+
+        void head(const std::string &path, RouteHandlerFunction handler);
+        void head(const std::vector<std::string> &paths, RouteHandlerFunction handler);
     };
 }
 
