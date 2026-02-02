@@ -22,6 +22,11 @@ namespace enderman
 
 enderman::Enderman::Enderman() : pImpl(new Impl()) {}
 
+enderman::Enderman::~Enderman()
+{
+    delete pImpl;
+}
+
 void enderman::Enderman::use(const std::string &path, MiddlewareFunction func)
 {
     auto segments = enderman::utils::UriParser::parse_path(path);

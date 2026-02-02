@@ -18,7 +18,8 @@ namespace enderman
         Impl *pImpl = nullptr;
 
     public:
-        Enderman();
+        explicit Enderman();
+        ~Enderman();
 
         void use(const std::vector<std::string> &paths, MiddlewareFunction func);
         void use(const std::string &path, MiddlewareFunction func);
