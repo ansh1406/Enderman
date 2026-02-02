@@ -16,7 +16,7 @@ namespace enderman
     struct Enderman::Impl
     {
         std::vector<Middleware> middlewares;
-        std::unordered_map<enderman::HttpMethod, std::vector<RouteHandler>> routes;
+        std::unordered_map<enderman::HttpMethod, std::vector<RouteHandler>> route_handlers;
     };
 }
 
@@ -49,7 +49,7 @@ void enderman::Enderman::use(MiddlewareFunction func)
 void enderman::Enderman::on(const enderman::HttpMethod method, const std::string &path, RouteHandlerFunction handler)
 {
     auto segments = enderman::utils::UriParser::parse_path(path);
-    pImpl->routes[method].emplace_back(segments, std::move(handler));
+    pImpl->route_handlers[method].emplace_back(segments, std::move(handler));
 }
 
 void enderman::Enderman::on(const enderman::HttpMethod method, const std::vector<std::string> &paths, RouteHandlerFunction handler)
