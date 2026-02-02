@@ -46,6 +46,7 @@ namespace enderman
             };
 
             static ParsedURI parse_uri(const std::string &uri);
+            static std::vector<std::string> parse_path(const std::string &path);
         };
     }
 }

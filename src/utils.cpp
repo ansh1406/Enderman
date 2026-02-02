@@ -15,17 +15,29 @@ enderman::utils::UriParser::ParsedURI enderman::utils::UriParser::parse_uri(cons
         auto normalized_segments = normalize_path(path_segments);
         auto query_params = parse_query_params(query);
 
+        for (auto &segment : normalized_segments)
+        {
+            segment = decode_url_encoding(segment);
+        }
+
+        std::unordered_map<std::string, std::string> decoded_query_params;
+
+        for (auto &pair : query_params)
+        {
+            decoded_query_params[decode_url_encoding(pair.first), decode_url_encoding(pair.second)];
+        }
+
         if (!is_valid_path(normalized_segments))
         {
             throw InvalidURIException("Invalid path in URI: " + path);
         }
 
-        if (!is_valid_query(query_params))
+        if (!is_valid_query(decoded_query_params))
         {
             throw InvalidURIException("Invalid query in URI: " + query);
         }
 
-        return ParsedURI{normalized_segments, query_params};
+        return ParsedURI{normalized_segments, decoded_query_params};
     }
     catch (const InvalidURLEncodingException &e)
     {
@@ -35,6 +47,14 @@ enderman::utils::UriParser::ParsedURI enderman::utils::UriParser::parse_uri(cons
     {
         throw InvalidURIException("Failed to parse URI: " + std::string(e.what()));
     }
+}
+
+std::vector<std::string> enderman::utils::UriParser::parse_path(const std::string &path)
+{
+    auto segments = split_path(path);
+    auto normalized_segments = normalize_path(segments);
+
+    return normalized_segments;
 }
 
 std::string enderman::utils::UriParser::decode_url_encoding(const std::string &encoded)
@@ -101,7 +121,7 @@ std::vector<std::string> enderman::utils::UriParser::split_path(const std::strin
     while (end != std::string::npos)
     {
         if (end != start)
-            segments.push_back(decode_url_encoding(path.substr(start, end - start)));
+            segments.push_back(path.substr(start, end - start));
         start = end + 1;
         end = path.find('/', start);
     }
@@ -143,13 +163,13 @@ std::unordered_map<std::string, std::string> enderman::utils::UriParser::parse_q
         size_t eq_pos = query.find('=', start);
         if (eq_pos != std::string::npos && eq_pos < end)
         {
-            std::string key = decode_url_encoding(query.substr(start, eq_pos - start));
-            std::string value = decode_url_encoding(query.substr(eq_pos + 1, end - eq_pos - 1));
+            std::string key = query.substr(start, eq_pos - start);
+            std::string value = query.substr(eq_pos + 1, end - eq_pos - 1);
             params[key] = value;
         }
         else
         {
-            std::string key = decode_url_encoding(query.substr(start, end - start));
+            std::string key = query.substr(start, end - start);
             params[key] = "";
         }
 
