@@ -85,3 +85,13 @@ void enderman::Enderman::get(const std::vector<std::string> &paths, RouteHandler
 {
     on(enderman::HttpMethod::GET, paths, std::move(handler));
 }
+
+void enderman::Enderman::post(const std::string &path, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::POST, path, std::move(handler));
+}
+
+void enderman::Enderman::post(const std::vector<std::string> &paths, RouteHandlerFunction handler)
+{
+    on(enderman::HttpMethod::POST, paths, std::move(handler));
+}

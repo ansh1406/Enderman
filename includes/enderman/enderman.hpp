@@ -32,6 +32,9 @@ namespace enderman
 
         void get(const std::string &path, RouteHandlerFunction handler);
         void get(const std::vector<std::string> &paths, RouteHandlerFunction handler);
+
+        void post(const std::string &path, RouteHandlerFunction handler);
+        void post(const std::vector<std::string> &paths, RouteHandlerFunction handler);
     };
 }
 
