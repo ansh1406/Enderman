@@ -50,6 +50,9 @@ namespace enderman
 
         void head(const std::string &path, RouteHandlerFunction handler);
         void head(const std::vector<std::string> &paths, RouteHandlerFunction handler);
+
+        void any(const std::string &path, RouteHandlerFunction handler);
+        void any(const std::vector<std::string> &paths, RouteHandlerFunction handler);
     };
 }
 

@@ -145,3 +145,25 @@ void enderman::Enderman::head(const std::vector<std::string> &paths, RouteHandle
 {
     on(enderman::HttpMethod::HEAD, paths, std::move(handler));
 }
+
+void enderman::Enderman::any(const std::string &path, RouteHandlerFunction handler)
+{
+    std::vector<enderman::HttpMethod> methods = {
+        enderman::HttpMethod::GET,
+        enderman::HttpMethod::POST,
+        enderman::HttpMethod::PUT,
+        enderman::HttpMethod::DELETE,
+        enderman::HttpMethod::PATCH,
+        enderman::HttpMethod::OPTIONS,
+        enderman::HttpMethod::HEAD};
+
+    on(methods, path, std::move(handler));
+}
+
+void enderman::Enderman::any(const std::vector<std::string> &paths, RouteHandlerFunction handler)
+{
+    for (auto &path : paths)
+    {
+        any(path, handler);
+    }
+}
