@@ -40,3 +40,33 @@ void enderman::Enderman::use(MiddlewareFunction func)
 {
     pImpl->middlewares.push_back(Middleware({}, std::move(func)));
 }
+
+void enderman::Enderman::on(const enderman::HttpMethod method, const std::string &path, RouteHandlerFunction handler)
+{
+    auto segments = enderman::utils::UriParser::parse_path(path);
+    pImpl->routes[method].emplace_back(segments, std::move(handler));
+}
+
+void enderman::Enderman::on(const enderman::HttpMethod method, const std::vector<std::string> &paths, RouteHandlerFunction handler)
+{
+    for (const auto &path : paths)
+    {
+        on(method, path, handler);
+    }
+}
+
+void enderman::Enderman::on(const std::vector<enderman::HttpMethod> &methods, const std::string &path, RouteHandlerFunction handler)
+{
+    for (const auto &method : methods)
+    {
+        on(method, path, handler);
+    }
+}
+
+void enderman::Enderman::on(const std::vector<enderman::HttpMethod> &methods, const std::vector<std::string> &paths, RouteHandlerFunction handler)
+{
+    for (const auto &method : methods)
+    {
+        on(method, paths, handler);
+    }
+}
