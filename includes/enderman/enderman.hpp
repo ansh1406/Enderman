@@ -29,6 +29,9 @@ namespace enderman
         void on(const enderman::HttpMethod method, const std::vector<std::string> &paths, RouteHandlerFunction handler);
         void on(const std::vector<enderman::HttpMethod> &methods, const std::string &path, RouteHandlerFunction handler);
         void on(const std::vector<enderman::HttpMethod> &methods, const std::vector<std::string> &paths, RouteHandlerFunction handler);
+
+        void get(const std::string &path, RouteHandlerFunction handler);
+        void get(const std::vector<std::string> &paths, RouteHandlerFunction handler);
     };
 }
 
