@@ -28,7 +28,7 @@ void enderman::Enderman::use(const std::string &path, MiddlewareFunction func)
     pImpl->middlewares.push_back(Middleware({segments}, std::move(func)));
 }
 
-void enderman::Enderman::use(const std::vector<std::string> paths, MiddlewareFunction func)
+void enderman::Enderman::use(const std::vector<std::string> &paths, MiddlewareFunction func)
 {
     for (const auto &path : paths)
     {
