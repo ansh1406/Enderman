@@ -1,4 +1,5 @@
 #include "enderman/types.hpp"
+#include "enderman/constants.hpp"
 #include "enderman/enderman.hpp"
 #include "enderman/utils.hpp"
 #include "enderman/middleware.hpp"
@@ -15,7 +16,7 @@ namespace enderman
     struct Enderman::Impl
     {
         std::vector<Middleware> middlewares;
-        std::unordered_map<std::string, std::vector<RouteHandler>> routes;
+        std::unordered_map<enderman::HttpMethod, std::vector<RouteHandler>> routes;
     };
 }
 
