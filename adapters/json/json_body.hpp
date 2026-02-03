@@ -1,3 +1,4 @@
+#pragma once
 #include "modules/json/includes/json.hpp"
 #include "enderman/body.hpp"
 
