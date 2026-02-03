@@ -41,6 +41,12 @@ namespace enderman
         const std::unordered_map<std::string, std::string> &headers() const { return _headers; }
         Body *get_body() const { return body; }
         bool has_body() const { return body != nullptr; }
+
+        void set_body(Body *body_ptr)
+        {
+            delete body;
+            body = body_ptr;
+        }
     };
 }
 
