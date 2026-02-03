@@ -1,4 +1,5 @@
 #include "enderman/response.hpp"
+#include "enderman/response_writer.hpp"
 #include "enderman/body.hpp"
 
 struct enderman::Response::Impl
@@ -17,7 +18,32 @@ struct enderman::Response::Impl
     }
 };
 
+int enderman::ResponseWriter::get_status_code(const enderman::Response &response)
+{
+    return response.pImpl->status_code;
+}
+
+std::string enderman::ResponseWriter::get_reason_phrase(const enderman::Response &response)
+{
+    return response.pImpl->message;
+}
+
+std::unordered_map<std::string, std::string> enderman::ResponseWriter::get_headers(const enderman::Response &response)
+{
+    return response.pImpl->headers;
+}
+
+std::vector<char> enderman::ResponseWriter::get_body(const enderman::Response &response)
+{
+    if (response.pImpl->body)
+    {
+        return response.pImpl->body->serialize();
+    }
+    return std::vector<char>();
+}
+
 enderman::Response::Response() : pImpl(new Impl()) {}
+
 enderman::Response::~Response()
 {
     delete pImpl;

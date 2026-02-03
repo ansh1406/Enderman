@@ -25,6 +25,8 @@ namespace enderman
         Response &set_body(Body *body);
 
         void send();
+
+        friend class ResponseWriter;
     };
 }
 
