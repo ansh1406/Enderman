@@ -15,12 +15,13 @@ namespace enderman
         virtual void parse_from(const std::vector<char> &body) = 0;
         virtual std::vector<char> serialize() const = 0;
         virtual const std::string &type() const = 0;
+
         template <typename T>
-        T &as(Body &body)
+        T *as() const
         {
-            if (body.type() == T::TYPE)
+            if (*this.type() == T::TYPE)
             {
-                return static_cast<T &>(body);
+                return static_cast<T *>(this);
             }
             throw std::bad_cast();
         }
