@@ -46,6 +46,16 @@ namespace enderman
             return values.find(key) != values.end();
         }
 
+        Object *Map::clone() const
+        {
+            Map *new_map = new Map();
+            for (const auto &[key, value] : values)
+            {
+                (*new_map)[key] = value->clone();
+            }
+            return new_map;
+        }
+
         Object *&Array::operator[](size_t index)
         {
             return values[index];
@@ -74,6 +84,16 @@ namespace enderman
         size_t Array::size() const noexcept
         {
             return values.size();
+        }
+
+        Object *Array::clone() const
+        {
+            Array *new_array = new Array();
+            for (const auto &value : values)
+            {
+                new_array->push(value->clone());
+            }
+            return new_array;
         }
 
         Object *parse_json(const nlohmann::json &j)
@@ -201,6 +221,13 @@ namespace enderman
             }
             }
             delete obj;
+        }
+
+        Object *clone_object(Object *obj)
+        {
+            if (!obj)
+                return nullptr;
+            return obj->clone();
         }
     }
 }

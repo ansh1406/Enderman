@@ -32,6 +32,7 @@ namespace enderman
             virtual long long &asInteger() { throw std::bad_cast{}; }
             virtual double &asDouble() { throw std::bad_cast{}; }
             virtual bool &asBoolean() { throw std::bad_cast{}; }
+            virtual Object *clone() const= 0;
         };
 
         class Null : public Object
@@ -39,6 +40,8 @@ namespace enderman
         public:
             Null() = default;
             int type() const noexcept override { return NULLTYPE; }
+
+            Object *clone() const override { return new Null(); }
         };
 
         class Map : public Object
@@ -54,6 +57,8 @@ namespace enderman
             Object *operator[](const std::string &key) const;
             size_t size() const noexcept;
             bool contains(const std::string &key) const;
+
+            Object *clone() const override;
         };
 
         class String : public Object
@@ -66,6 +71,8 @@ namespace enderman
             String() = default;
             int type() const noexcept override { return STRING; }
             std::string &asString() override { return value; }
+
+            Object *clone() const override { return new String(value); }
         };
 
         class Number : public Object
@@ -85,6 +92,8 @@ namespace enderman
             Integer();
             int type() const noexcept override { return INTEGER; }
             long long &asInteger() override { return value; }
+
+            Object *clone() const override { return new Integer(value); }
         };
 
         class Double : public Number
@@ -97,6 +106,8 @@ namespace enderman
             Double();
             int type() const noexcept override { return DOUBLE; }
             double &asDouble() override { return value; }
+
+            Object *clone() const override { return new Double(value); }
         };
 
         class Boolean : public Number
@@ -109,6 +120,8 @@ namespace enderman
             Boolean();
             int type() const noexcept override { return BOOLEAN; }
             bool &asBoolean() override { return value; }
+
+            Object *clone() const override { return new Boolean(value); }
         };
 
         class Array : public Object
@@ -126,10 +139,13 @@ namespace enderman
             Object *back();
             void insert(Object *obj, size_t index);
             size_t size() const noexcept;
+
+            Object *clone() const override;
         };
         enderman::json::Object *parse_json(const std::string &json_str);
         std::string stringify(enderman::json::Object *obj);
         void free_json(enderman::json::Object *obj);
+        Object *clone_object(Object *obj);
     }
 }
 
