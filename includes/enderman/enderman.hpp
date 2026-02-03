@@ -53,6 +53,8 @@ namespace enderman
 
         void any(const std::string &path, RouteHandlerFunction handler);
         void any(const std::vector<std::string> &paths, RouteHandlerFunction handler);
+
+        void listen(const unsigned short port);
     };
 }
 

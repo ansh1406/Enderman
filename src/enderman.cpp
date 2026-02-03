@@ -5,11 +5,14 @@
 #include "enderman/middleware.hpp"
 #include "enderman/route_handler.hpp"
 
+#include "adapters/http/http_adapter.hpp"
+
 #include <functional>
 #include <stdexcept>
 #include <vector>
 #include <utility>
 #include <unordered_map>
+#include <iostream>
 
 namespace enderman
 {
@@ -165,5 +168,32 @@ void enderman::Enderman::any(const std::vector<std::string> &paths, RouteHandler
     for (auto &path : paths)
     {
         any(path, handler);
+    }
+}
+
+void enderman::Enderman::listen(const unsigned short port)
+{
+    enderman::http::HttpAdapter http_adapter;
+    try
+    {
+        EndermanCallbackFunction handler = [this](Request &req, Response &res)
+        {
+            /// @todo Implement request handling logic
+        };
+        http_adapter.create_server(port, handler);
+    }
+    catch (const enderman::http::HttpAdapter::UnableToCreateServerException &e)
+    {
+        std::cerr << e.what() << std::endl;
+        return;
+    }
+    try
+    {
+        http_adapter.start_server();
+    }
+    catch (const enderman::http::HttpAdapter::HttpServerInternalError &e)
+    {
+        std::cerr << e.what() << std::endl;
+        return;
     }
 }
