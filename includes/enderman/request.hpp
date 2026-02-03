@@ -33,6 +33,8 @@ namespace enderman
               _headers(headers),
               body(body_ptr) {}
 
+        ~Request() { delete body; }
+
         HttpMethod method() const { return _method; }
         const std::vector<std::string> &path_segments() const { return _path_segments; }
         const std::unordered_map<std::string, std::string> &path_params() const { return _path_params; }
