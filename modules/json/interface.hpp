@@ -31,7 +31,7 @@ namespace enderman
             }
             const std::string &type() const override { return std::string(TYPE); }
 
-            ~JsonBody()
+            ~JsonBody() override
             {
                 delete jsonobj;
             }
