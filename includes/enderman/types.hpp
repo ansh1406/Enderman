@@ -8,7 +8,6 @@ namespace enderman
 {
     class Request;
     class Response;
-    class ResponseWriter;
     class Body;
 
     using Next = std::function<void(std::exception_ptr)>;
