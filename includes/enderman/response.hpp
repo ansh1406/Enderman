@@ -1,0 +1,31 @@
+#ifndef ENDERMAN_RESPONSE_HPP
+#define ENDERMAN_RESPONSE_HPP
+
+#include "enderman/types.hpp"
+
+#include <string>
+#include <unordered_map>
+
+namespace enderman
+{
+    class Response
+    {
+    private:
+        struct Impl;
+        struct Impl *pImpl;
+
+    public:
+
+        explicit Response();
+        ~Response();
+
+        Response &set_status(int status_code);
+        Response &set_message(const std::string &message);
+        Response &set_header(const std::string &key, const std::string &value);
+        Response &set_body(Body *body);
+
+        void send();
+    };
+}
+
+#endif // ENDERMAN_RESPONSE_HPP
