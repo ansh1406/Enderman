@@ -17,6 +17,22 @@ namespace enderman
         Boolean::Boolean(bool v) : value(v) {}
         Boolean::Boolean() : value(false) {}
 
+        Map::~Map()
+        {
+            for (auto &[key, value] : values)
+            {
+                delete value;
+            }
+        }
+
+        Array::~Array()
+        {
+            for (auto &value : values)
+            {
+                delete value;
+            }
+        }
+
         Object *&Map::operator[](const std::string &key)
         {
             if (values.find(key) == values.end())
@@ -194,33 +210,6 @@ namespace enderman
                 break;
             }
             return j.dump();
-        }
-
-        void free_json(enderman::json::Object *obj)
-        {
-            if (!obj)
-                return;
-
-            switch (obj->type())
-            {
-            case enderman::json::MAP:
-            {
-                for (auto &[key, value] : obj->asMap())
-                {
-                    free_json(value);
-                }
-                break;
-            }
-            case enderman::json::ARRAY:
-            {
-                for (auto &value : obj->asArray())
-                {
-                    free_json(value);
-                }
-                break;
-            }
-            }
-            delete obj;
         }
 
         Object *clone_object(Object *obj)

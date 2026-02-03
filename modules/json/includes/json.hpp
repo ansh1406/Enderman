@@ -32,7 +32,7 @@ namespace enderman
             virtual long long &asInteger() { throw std::bad_cast{}; }
             virtual double &asDouble() { throw std::bad_cast{}; }
             virtual bool &asBoolean() { throw std::bad_cast{}; }
-            virtual Object *clone() const= 0;
+            virtual Object *clone() const = 0;
         };
 
         class Null : public Object
@@ -51,6 +51,7 @@ namespace enderman
 
         public:
             Map() = default;
+            ~Map();
             int type() const noexcept override { return MAP; }
             std::map<std::string, Object *> &asMap() override { return values; }
             Object *&operator[](const std::string &key);
@@ -131,6 +132,7 @@ namespace enderman
 
         public:
             Array() = default;
+            ~Array();
             int type() const noexcept override { return ARRAY; }
             std::vector<Object *> &asArray() override { return values; }
             Object *&operator[](size_t index);
@@ -144,7 +146,6 @@ namespace enderman
         };
         enderman::json::Object *parse_json(const std::string &json_str);
         std::string stringify(enderman::json::Object *obj);
-        void free_json(enderman::json::Object *obj);
         Object *clone_object(Object *obj);
     }
 }
