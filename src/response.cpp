@@ -87,3 +87,8 @@ void enderman::Response::send()
 {
     pImpl->is_final = true;
 }
+
+bool enderman::Response::is_sent() const
+{
+    return pImpl->is_final;
+}
