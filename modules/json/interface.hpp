@@ -13,7 +13,12 @@ namespace enderman
             static constexpr const char *TYPE = "application/json";
 
         public:
-            JsonBody() : jsonobj(nullptr) {}
+            JsonBody(enderman::json::Object *obj = new Null()) : jsonobj(obj) {}
+            JsonBody *clone() const override
+            {
+                JsonBody *new_body = new JsonBody(jsonobj->clone());
+                return new_body;
+            }
             void parse_from(const std::vector<char> &body) override
             {
                 std::string str(body.begin(), body.end());
@@ -25,6 +30,11 @@ namespace enderman
                 return std::vector<char>(str.begin(), str.end());
             }
             const std::string &type() const override { return std::string(TYPE); }
+
+            ~JsonBody()
+            {
+                delete jsonobj;
+            }
         };
     }
 
