@@ -34,41 +34,34 @@ else()
   message(FATAL_ERROR "http/CMakeLists.txt not found. Ensure the http folder is present.")
 endif()
 
-# Now add the main enderman target (sources are in src/)
-# Create a simple target if a CMakeLists for enderman is not provided
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.enderman.cmake")
-  include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.enderman.cmake)
+file(GLOB_RECURSE ENDERMAN_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+)
+
+file(GLOB_RECURSE ENDERMAN_HTTP_ADAPTER 
+  ${CMAKE_CURRENT_SOURCE_DIR}/adapters/http/*.cpp
+)
+
+list (APPEND ENDERMAN_SOURCES ${ENDERMAN_HTTP_ADAPTER})
+
+if(TARGET http)
+  list(APPEND ENDERMAN_SOURCES $<TARGET_OBJECTS:http_objects>)
 else()
-  file(GLOB_RECURSE ENDERMAN_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
-  )
+  message(FATAL_ERROR "http target not found. Ensure the http component is built correctly.")
+endif()
 
-  file(GLOB_RECURSE ENDERMAN_HTTP_ADAPTER 
-    ${CMAKE_CURRENT_SOURCE_DIR}/adapters/http/*.cpp
-  )
-
-  # Filter out nonexistent globs gracefully
-  if(ENDERMAN_SOURCES)
-    # Build enderman as a static library
-    add_library(enderman STATIC ${ENDERMAN_SOURCES} ${ENDERMAN_HTTP_ADAPTER})
-    target_include_directories(enderman PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes)
-    target_include_directories(enderman PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-    # Link against http library if it created a target named "http"
-    if(TARGET http)
-      target_link_libraries(enderman PUBLIC http)
-    endif()
-    if(BUILD_MODULE_JSON)
-      if(TARGET json)
-        target_link_libraries(enderman PUBLIC json)
-      else()
-        message(FATAL_ERROR "json module target not found but BUILD_MODULE_JSON=ON")
-      endif()
-    endif()
-    set_target_properties(enderman PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_OUTPUT_DIR})
+if(BUILD_MODULE_JSON)
+  if(TARGET json)
+    list(APPEND ENDERMAN_SOURCES $<TARGET_OBJECTS:json_objects>)
   else()
-    message(WARNING "No enderman sources found in src/; skipping library creation.")
+    message(FATAL_ERROR "json target not found even though BUILD_MODULE_JSON=ON")
   endif()
 endif()
 
-# Provide a helpful summary
+add_library(enderman STATIC ${ENDERMAN_SOURCES})
+target_include_directories(enderman PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes)
+target_include_directories(enderman PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+set_target_properties(enderman PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_OUTPUT_DIR})
+
 message(STATUS "HTTP library output: ${LIB_OUTPUT_DIR}")
