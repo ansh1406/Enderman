@@ -9,6 +9,6 @@ target_include_directories(json PUBLIC ${JSON_INCLUDE_DIR})
 
 set_target_properties(json PROPERTIES
 	OUTPUT_NAME "json"
-	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
