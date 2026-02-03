@@ -14,12 +14,12 @@ namespace enderman
         virtual Body *clone() const = 0;
         virtual void parse_from(const std::vector<char> &body) = 0;
         virtual std::vector<char> serialize() const = 0;
-        virtual const std::string &type() const = 0;
+        virtual const std::string type() const = 0;
 
         template <typename T>
         T *as() const
         {
-            if (*this.type() == T::TYPE)
+            if (this->type() == T::TYPE)
             {
                 return static_cast<T *>(this);
             }
@@ -50,7 +50,7 @@ namespace enderman
         {
             return data;
         }
-        const std::string &type() const override { return std::string(TYPE); }
+        const std::string type() const override { return std::string(TYPE); }
     };
 
 }
