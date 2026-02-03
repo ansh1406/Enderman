@@ -48,6 +48,13 @@ namespace enderman
             static ParsedURI parse_uri(const std::string &uri);
             static std::vector<std::string> parse_path(const std::string &path);
         };
+
+        class PathMatcher
+        {
+        public:
+            static bool match(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments);
+            static std::unordered_map<std::string, std::string> extract_path_params(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments);
+        };
     }
 }
 

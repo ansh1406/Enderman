@@ -208,3 +208,44 @@ bool enderman::utils::UriParser::is_valid_query(const std::unordered_map<std::st
     }
     return true;
 }
+
+bool enderman::utils::PathMatcher::match(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments)
+{
+    if (pattern_segments.size() != path_segments.size())
+        return false;
+
+    for (size_t i = 0; i < path_segments.size(); ++i)
+    {
+        if (pattern_segments[i].empty() || path_segments[i].empty())
+            return false;
+        if (pattern_segments[i] == "*")
+            continue; // Wildcard segment
+
+        if (pattern_segments[i][0] == ':')
+            continue; // Parameter segment
+
+        if (pattern_segments[i] != path_segments[i])
+            return false;
+    }
+
+    return true;
+}
+
+std::unordered_map<std::string, std::string> enderman::utils::PathMatcher::extract_path_params(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments)
+{
+    std::unordered_map<std::string, std::string> params;
+
+    for (size_t i = 0; i < pattern_segments.size(); ++i)
+    {
+        if (pattern_segments[i].empty() || path_segments[i].empty())
+            continue; // Skip invalid segments
+
+        if (pattern_segments[i][0] == ':')
+        {
+            std::string param_name = pattern_segments[i].substr(1);
+            params[param_name] = path_segments[i];
+        }
+    }
+
+    return params;
+}
