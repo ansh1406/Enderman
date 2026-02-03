@@ -122,7 +122,7 @@ void enderman::http::HttpAdapter::start_server()
 {
     if (pImpl == nullptr)
     {
-        throw enderman::http::HttpAdapter::UnableToStartServerException("HTTP server not created. Call create_server() before starting the server.");
+        throw enderman::http::HttpAdapter::HttpServerInternalError("HTTP server not created. Call create_server() before starting the server.");
     }
     try
     {
@@ -130,10 +130,10 @@ void enderman::http::HttpAdapter::start_server()
     }
     catch (const std::exception &e)
     {
-        throw enderman::http::HttpAdapter::UnableToStartServerException("Unable to start HTTP server: " + std::string(e.what()));
+        throw enderman::http::HttpAdapter::HttpServerInternalError("Unable to start HTTP server: " + std::string(e.what()));
     }
     catch (...)
     {
-        throw enderman::http::HttpAdapter::UnableToStartServerException("Unable to start HTTP server: Unknown error");
+        throw enderman::http::HttpAdapter::HttpServerInternalError("Unable to start HTTP server: Unknown error");
     }
 }

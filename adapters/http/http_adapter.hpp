@@ -31,9 +31,9 @@ namespace enderman
                     : std::runtime_error(message) {}
             };
 
-            struct UnableToStartServerException : public std::runtime_error
+            struct HttpServerInternalError : public std::runtime_error
             {
-                explicit UnableToStartServerException(const std::string &message)
+                explicit HttpServerInternalError(const std::string &message)
                     : std::runtime_error(message) {}
             };
         };
