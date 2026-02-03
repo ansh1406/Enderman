@@ -54,7 +54,10 @@ enderman::Request convert_http_request_to_enderman_request(const ::http::HttpReq
 void write_enderman_response_to_http_response(const enderman::Response &enderman_response, ::http::HttpResponse &http_response)
 {
     http_response.set_status_code(enderman::ResponseWriter::get_status_code(enderman_response));
-    http_response.set_status_message(enderman::ResponseWriter::get_reason_phrase(enderman_response));
+    std::string reason_phrase = enderman::ResponseWriter::get_reason_phrase(enderman_response);
+    if (reason_phrase.empty())
+        reason_phrase = " ";
+    http_response.set_status_message(reason_phrase);
     auto headers = enderman::ResponseWriter::get_headers(enderman_response);
     for (const auto &header : headers)
     {
