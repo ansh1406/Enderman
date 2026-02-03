@@ -1,9 +1,9 @@
 #ifndef ENDERMAN_REQUEST_HPP
 #define ENDERMAN_REQUEST_HPP
 
-#include "enderman/types.hpp"
-#include "enderman/constants.hpp"
-#include "enderman/body.hpp"
+#include "types.hpp"
+#include "constants.hpp"
+#include "body.hpp"
 
 #include <string>
 #include <unordered_map>

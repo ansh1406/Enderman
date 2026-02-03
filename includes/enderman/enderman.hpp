@@ -1,8 +1,8 @@
 #ifndef ENDERMAN_HPP
 #define ENDERMAN_HPP
 
-#include "enderman/types.hpp"
-#include "enderman/constants.hpp"
+#include "types.hpp"
+#include "constants.hpp"
 
 #include <functional>
 #include <stdexcept>

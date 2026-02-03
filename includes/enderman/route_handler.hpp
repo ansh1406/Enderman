@@ -1,7 +1,7 @@
 #ifndef ENDERMAN_ROUTE_HANDLER_HPP
 #define ENDERMAN_ROUTE_HANDLER_HPP
 
-#include "enderman/types.hpp"
+#include "types.hpp"
 
 #include <string>
 #include <vector>

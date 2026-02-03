@@ -1,7 +1,7 @@
 #ifndef ENDERMAN_RESPONSE_WRITER_HPP
 #define ENDERMAN_RESPONSE_WRITER_HPP
 
-#include "enderman/types.hpp"
+#include "types.hpp"
 
 #include <unordered_map>
 #include <vector>

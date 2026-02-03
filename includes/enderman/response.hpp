@@ -1,7 +1,7 @@
 #ifndef ENDERMAN_RESPONSE_HPP
 #define ENDERMAN_RESPONSE_HPP
 
-#include "enderman/types.hpp"
+#include "types.hpp"
 
 #include <string>
 #include <unordered_map>
