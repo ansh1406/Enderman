@@ -4,6 +4,8 @@
 #include "enderman/utils.hpp"
 #include "enderman/middleware.hpp"
 #include "enderman/route_handler.hpp"
+#include "enderman/request.hpp"
+#include "enderman/response.hpp"
 
 #include "adapters/http/http_adapter.hpp"
 
@@ -20,6 +22,9 @@ namespace enderman
     {
         std::vector<Middleware> middlewares;
         std::unordered_map<enderman::HttpMethod, std::vector<RouteHandler>> route_handlers;
+
+        void run_middlewares(Request &req, Response &res);
+        void run_route_handler(Request &req, Response &res);
     };
 }
 
@@ -178,7 +183,12 @@ void enderman::Enderman::listen(const unsigned short port)
     {
         EndermanCallbackFunction handler = [this](Request &req, Response &res)
         {
-            /// @todo Implement request handling logic
+            pImpl->run_middlewares(req, res);
+            if (res.is_sent())
+            {
+                return;
+            }
+            pImpl->run_route_handler(req, res);
         };
         http_adapter.create_server(port, handler);
     }
@@ -196,4 +206,60 @@ void enderman::Enderman::listen(const unsigned short port)
         std::cerr << e.what() << std::endl;
         return;
     }
+}
+
+void enderman::Enderman::Impl::run_middlewares(Request &req, Response &res)
+{
+    size_t index = 0;
+    enderman::Next next = [&](std::exception_ptr e)
+    {
+        if (res.is_sent())
+        {
+            return;
+        }
+
+        if (e)
+        {
+            res.set_status(500).set_body(nullptr).send();
+            return;
+        }
+
+        while (index < middlewares.size())
+        {
+            Middleware &mw = middlewares[index++];
+            if (enderman::utils::PathMatcher::match(req.path_segments(), mw.path))
+            {
+                auto path_params = enderman::utils::PathMatcher::extract_path_params(req.path_segments(), mw.path);
+                for (const auto &pair : path_params)
+                {
+                    req.set_path_param(pair.first, pair.second);
+                }
+                mw.func(req, res, next);
+                return;
+            }
+        }
+    };
+    next(nullptr);
+}
+
+void enderman::Enderman::Impl::run_route_handler(Request &req, Response &res)
+{
+    auto it = route_handlers.find(req.method());
+    if (it != route_handlers.end())
+    {
+        for (const auto &route_handler : it->second)
+        {
+            if (enderman::utils::PathMatcher::match(req.path_segments(), route_handler.path))
+            {
+                auto path_params = enderman::utils::PathMatcher::extract_path_params(req.path_segments(), route_handler.path);
+                for (const auto &pair : path_params)
+                {
+                    req.set_path_param(pair.first, pair.second);
+                }
+                route_handler.handler(req, res);
+                return;
+            }
+        }
+    }
+    res.set_status(404).set_body(nullptr).send();
 }
