@@ -30,7 +30,7 @@ namespace enderman
                 std::string str = enderman::json::stringify(jsonobj);
                 return std::vector<char>(str.begin(), str.end());
             }
-            const std::string &type() const override { return std::string(TYPE); }
+            const std::string type() const override { return std::string(TYPE); }
 
             ~JsonBody() override
             {
