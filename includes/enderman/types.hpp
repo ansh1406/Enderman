@@ -3,10 +3,12 @@
 
 #include <functional>
 #include <stdexcept>
+
 namespace enderman
 {
     class Request;
     class Response;
+    class Body;
 
     using Next = std::function<void(std::exception_ptr)>;
     using MiddlewareFunction = std::function<void(class Request &, class Response &, const Next &)>;
