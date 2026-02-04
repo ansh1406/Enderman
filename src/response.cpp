@@ -1,6 +1,7 @@
-#include "includes/response.hpp"
-#include "src/response_writer.hpp"
-#include "includes/body.hpp"
+#include "enderman/response.hpp"
+#include "enderman/body.hpp"
+
+#include "response_writer.hpp"
 
 struct enderman::Response::Impl
 {

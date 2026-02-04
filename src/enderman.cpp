@@ -1,13 +1,14 @@
-#include "includes/types.hpp"
-#include "includes/constants.hpp"
-#include "includes/enderman.hpp"
-#include "src/utils.hpp"
-#include "src/middleware.hpp"
-#include "src/route_handler.hpp"
-#include "includes/request.hpp"
-#include "includes/response.hpp"
+#include "enderman/types.hpp"
+#include "enderman/constants.hpp"
+#include "enderman/enderman.hpp"
+#include "enderman/request.hpp"
+#include "enderman/response.hpp"
 
-#include "src/http/http_adapter.hpp"
+#include "http/http_adapter.hpp"
+
+#include "utils.hpp"
+#include "middleware.hpp"
+#include "route_handler.hpp"
 
 #include <functional>
 #include <stdexcept>
