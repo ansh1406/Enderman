@@ -1,7 +1,7 @@
 #ifndef ENDERMAN_MIDDLEWARE_HPP
 #define ENDERMAN_MIDDLEWARE_HPP
 
-#include "types.hpp"
+#include "includes/types.hpp"
 
 #include <functional>
 #include <string>

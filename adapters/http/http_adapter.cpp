@@ -1,12 +1,12 @@
 #include "adapters/http/http_adapter.hpp"
 
-#include "enderman/types.hpp"
-#include "enderman/request.hpp"
-#include "enderman/response.hpp"
-#include "enderman/response_writer.hpp"
-#include "enderman/body.hpp"
-#include "enderman/utils.hpp"
-#include "enderman/constants.hpp"
+#include "includes/types.hpp"
+#include "includes/request.hpp"
+#include "includes/response.hpp"
+#include "src/response_writer.hpp"
+#include "includes/body.hpp"
+#include "src/utils.hpp"
+#include "includes/constants.hpp"
 
 #include <string>
 #include <unordered_map>
