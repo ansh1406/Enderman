@@ -53,7 +53,7 @@ if(BUILD_MODULE_JSON)
 endif()
 
 add_library(enderman STATIC ${ENDERMAN_SOURCES})
-target_include_directories(enderman PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(enderman PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/http/includes")
 target_include_directories(enderman PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/includes")
 
 set_target_properties(enderman PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_OUTPUT_DIR})
