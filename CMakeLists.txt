@@ -38,12 +38,6 @@ file(GLOB_RECURSE ENDERMAN_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
 )
 
-file(GLOB_RECURSE ENDERMAN_HTTP_ADAPTER 
-  ${CMAKE_CURRENT_SOURCE_DIR}/adapters/http/*.cpp
-)
-
-list (APPEND ENDERMAN_SOURCES ${ENDERMAN_HTTP_ADAPTER})
-
 if(TARGET http)
   list(APPEND ENDERMAN_SOURCES $<TARGET_OBJECTS:http_objects>)
 else()
@@ -64,3 +58,22 @@ target_include_directories(enderman PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 set_target_properties(enderman PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_OUTPUT_DIR})
 
 message(STATUS "HTTP library output: ${LIB_OUTPUT_DIR}")
+
+file(GLOB MODULE_DIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/modules/*)
+
+add_custom_target(copy_module_libs ALL)
+
+foreach(MOD_PATH ${MODULE_DIRS})
+  get_filename_component(MOD_NAME ${MOD_PATH} NAME)
+  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/modules/${MOD_NAME}/CMakeLists.txt")
+    if(TARGET ${MOD_NAME})
+      add_dependencies(copy_module_libs ${MOD_NAME})
+      set(PLUGIN_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/plugins/${MOD_NAME}/lib")
+      file(MAKE_DIRECTORY ${PLUGIN_LIB_DIR})
+      add_custom_command(TARGET copy_module_libs POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo "Copying $<TARGET_FILE_NAME:${MOD_NAME}> to ${PLUGIN_LIB_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${MOD_NAME}> ${PLUGIN_LIB_DIR}/$<TARGET_FILE_NAME:${MOD_NAME}>
+      )
+    endif()
+  endif()
+endforeach()
