@@ -1,4 +1,4 @@
-#include "adapters/http/http_adapter.hpp"
+#include "http_adapter.hpp"
 
 #include "includes/types.hpp"
 #include "includes/request.hpp"

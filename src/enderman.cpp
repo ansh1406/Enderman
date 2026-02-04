@@ -7,7 +7,7 @@
 #include "includes/request.hpp"
 #include "includes/response.hpp"
 
-#include "adapters/http/http_adapter.hpp"
+#include "src/http/http_adapter.hpp"
 
 #include <functional>
 #include <stdexcept>
