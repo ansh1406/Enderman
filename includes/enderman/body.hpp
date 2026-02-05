@@ -11,7 +11,6 @@ namespace enderman
     public:
         Body() = default;
         virtual ~Body() = default;
-        virtual Body *clone() const = 0;
         virtual void parse_from(const std::vector<char> &body) = 0;
         virtual std::vector<char> serialize() const = 0;
         virtual const std::string type() const = 0;
@@ -36,12 +35,6 @@ namespace enderman
     public:
         RawBody() = default;
         ~RawBody() override = default;
-        RawBody *clone() const override
-        {
-            RawBody *new_body = new RawBody();
-            new_body->data = data;
-            return new_body;
-        }
         void parse_from(const std::vector<char> &body) override
         {
             data = body;
