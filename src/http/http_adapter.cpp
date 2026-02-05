@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <functional>
 #include <stdexcept>
+#include <memory>
 
 enderman::HttpMethod get_enderman_method(const std::string &method_str)
 {
@@ -45,7 +46,7 @@ enderman::Request convert_http_request_to_enderman_request(const ::http::HttpReq
                                        nullptr);
     if (!http_request.body.empty())
     {
-        enderman::RawBody *body = new enderman::RawBody();
+        std::shared_ptr<enderman::RawBody> body = std::make_shared<enderman::RawBody>();
         body->parse_from(http_request.body);
         enderman_request.set_body(body);
     }
