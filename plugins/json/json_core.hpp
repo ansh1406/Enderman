@@ -1,11 +1,6 @@
 #ifndef ENDERMAN_JSON_HPP
 #define ENDERMAN_JSON_HPP
 
-#include "enderman/body.hpp"
-#include "enderman/request.hpp"
-#include "enderman/response.hpp"
-#include "enderman/types.hpp"
-
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -79,42 +74,6 @@ namespace enderman_json
 
     Object parse_json(const std::string &json_str);
     std::string stringify(const Object &obj);
-}
-
-namespace enderman
-{
-    class JsonBody : public enderman::Body
-    {
-    private:
-        enderman_json::Object jsonobj;
-        static constexpr const char *TYPE = "application/json";
-
-    public:
-        JsonBody(enderman_json::Object obj = enderman_json::Object()) : jsonobj(obj) {}
-        void parse_from(const std::vector<char> &body) override
-        {
-            std::string str(body.begin(), body.end());
-            jsonobj = enderman_json::parse_json(str);
-        }
-        std::vector<char> serialize() const override
-        {
-            std::string str = enderman_json::stringify(jsonobj);
-            return std::vector<char>(str.begin(), str.end());
-        }
-        const std::string type() const override { return std::string(TYPE); }
-    };
-    auto json_parser = MiddlewareFunction(
-        [](Request &req, Response &res, Next next)
-        {
-            auto content_type_it = req.headers().find("Content-Type");
-            if (content_type_it != req.headers().end() && content_type_it->second == "application/json")
-            {
-                std::shared_ptr<JsonBody> json_body = std::make_shared<JsonBody>();
-                json_body->parse_from(req.get_body()->serialize());
-                req.set_body(json_body);
-            }
-            next(nullptr);
-        });
 }
 
 #endif // ENDERMAN_JSON_HPP

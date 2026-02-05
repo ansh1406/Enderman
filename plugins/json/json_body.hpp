@@ -1,5 +1,5 @@
 #pragma once
-#include "json.hpp"
+#include "json_core.hpp"
 #include "enderman/body.hpp"
 
 namespace enderman
