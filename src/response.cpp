@@ -3,20 +3,18 @@
 
 #include "response_writer.hpp"
 
+#include <memory>
+
 struct enderman::Response::Impl
 {
     int status_code;
     std::string message;
     std::unordered_map<std::string, std::string> headers;
-    Body *body;
+    std::shared_ptr<Body> body;
 
     bool is_final;
 
     Impl() : status_code(200), body(nullptr), is_final(false) {}
-    ~Impl()
-    {
-        delete body;
-    }
 };
 
 int enderman::ResponseWriter::get_status_code(const enderman::Response &response)
@@ -49,6 +47,7 @@ enderman::Response::~Response()
 {
     delete pImpl;
 }
+
 enderman::Response &enderman::Response::set_status(int status_code)
 {
     if (pImpl->is_final)
@@ -73,11 +72,10 @@ enderman::Response &enderman::Response::set_header(const std::string &key, const
     return *this;
 }
 
-enderman::Response &enderman::Response::set_body(Body *body)
+enderman::Response &enderman::Response::set_body(std::shared_ptr<Body> body)
 {
     if (pImpl->is_final)
         return *this;
-    delete pImpl->body;
     pImpl->body = body;
     if (body)
         set_header("Content-Type", body->type());

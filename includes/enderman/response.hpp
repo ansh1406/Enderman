@@ -5,6 +5,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 namespace enderman
 {
@@ -22,7 +23,7 @@ namespace enderman
         Response &set_status(int status_code);
         Response &set_message(const std::string &message);
         Response &set_header(const std::string &key, const std::string &value);
-        Response &set_body(Body *body);
+        Response &set_body(std::shared_ptr<Body> body);
 
         void send();
         bool is_sent() const;
