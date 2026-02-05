@@ -65,8 +65,9 @@ namespace enderman_json
         delete pImpl;
     }
 
-    Object::Object(const Object &other) : pImpl(new Impl())
+    Object::Object(const Object &other)
     {
+        pImpl = new Impl();
         pImpl->internal = other.pImpl->internal;
     }
 
@@ -81,6 +82,7 @@ namespace enderman_json
 
     Object::Object(Object &&other) noexcept
     {
+        pImpl = new Impl();
         this->pImpl->internal = std::move(other.pImpl->internal);
     }
 
