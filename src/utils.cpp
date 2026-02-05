@@ -231,6 +231,27 @@ bool enderman::utils::PathMatcher::match(const std::vector<std::string> &path_se
     return true;
 }
 
+bool enderman::utils::PathMatcher::match_prefix(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments)
+{
+    if (pattern_segments.size() > path_segments.size())
+        return false;
+
+    for (size_t i = 0; i < pattern_segments.size(); ++i)
+    {
+        if (pattern_segments[i].empty() || path_segments[i].empty())
+            return false;
+        if (pattern_segments[i] == "*")
+            continue; // Wildcard segment
+
+        if (pattern_segments[i][0] == ':')
+            continue; // Parameter segment
+
+        if (pattern_segments[i] != path_segments[i])
+            return false;
+    }
+    return true;
+}
+
 std::unordered_map<std::string, std::string> enderman::utils::PathMatcher::extract_path_params(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments)
 {
     std::unordered_map<std::string, std::string> params;

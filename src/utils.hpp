@@ -53,6 +53,7 @@ namespace enderman
         {
         public:
             static bool match(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments);
+            static bool match_prefix(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments);
             static std::unordered_map<std::string, std::string> extract_path_params(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments);
         };
     }

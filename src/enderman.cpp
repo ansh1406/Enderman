@@ -228,7 +228,7 @@ void enderman::Enderman::Impl::run_middlewares(Request &req, Response &res)
         while (index < middlewares.size())
         {
             Middleware &mw = middlewares[index++];
-            if (enderman::utils::PathMatcher::match(req.path_segments(), mw.path))
+            if (enderman::utils::PathMatcher::match_prefix(req.path_segments(), mw.path))
             {
                 auto path_params = enderman::utils::PathMatcher::extract_path_params(req.path_segments(), mw.path);
                 for (const auto &pair : path_params)
