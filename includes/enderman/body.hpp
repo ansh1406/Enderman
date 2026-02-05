@@ -31,7 +31,7 @@ namespace enderman
     {
     private:
         std::vector<char> data;
-        static constexpr const char *TYPE = "raw";
+        static constexpr const char *TYPE = "application/octet-stream";
 
     public:
         RawBody() = default;
