@@ -60,7 +60,7 @@ namespace enderman_json
         void pop_back();
         void insert(const Object &value, const size_t index);
         void erase(const size_t index);
-        void find(const std::string &key);
+        bool find(const std::string &key) const;
 
         size_t size() const;
 

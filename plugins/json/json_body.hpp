@@ -6,11 +6,8 @@ namespace enderman
 {
     class JsonBody : public enderman::Body
     {
-    private:
-        enderman_json::Object jsonobj;
-        static constexpr const char *TYPE = "application/json";
-
     public:
+        enderman_json::Object jsonobj;
         JsonBody(enderman_json::Object obj = enderman_json::Object()) : jsonobj(obj) {}
         void parse_from(const std::vector<char> &body)
         {
@@ -22,6 +19,6 @@ namespace enderman
             std::string str = enderman_json::stringify(jsonobj);
             return std::vector<char>(str.begin(), str.end());
         }
-        const std::string type() const override { return std::string(TYPE); }
+        const std::string type() const override { return std::string("application/json"); }
     };
 }

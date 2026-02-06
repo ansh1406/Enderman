@@ -251,7 +251,7 @@ namespace enderman_json
         arr.erase(arr.begin() + index);
     }
 
-    void Object::find(const std::string &key)
+    bool Object::find(const std::string &key) const
     {
         if (this->type() != MAP)
         {
@@ -261,8 +261,9 @@ namespace enderman_json
         auto it = m.find(key);
         if (it == m.end())
         {
-            throw std::out_of_range("Key not found");
+            return false;
         }
+        return true;
     }
 
     size_t Object::size() const
