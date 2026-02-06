@@ -400,10 +400,14 @@ namespace enderman_json
             return Object(nlohmann_json_obj.get<bool>());
         case nlohmann::json::value_t::number_integer:
             return Object(nlohmann_json_obj.get<long long>());
+        case nlohmann::json::value_t::number_unsigned:
+            return Object(nlohmann_json_obj.get<long long>());
         case nlohmann::json::value_t::number_float:
             return Object(nlohmann_json_obj.get<double>());
         case nlohmann::json::value_t::string:
             return Object(nlohmann_json_obj.get<std::string>());
+        case nlohmann::json::value_t::binary:
+            return Object(); // Binary type is not supported, return null
         case nlohmann::json::value_t::array:
         {
             json_array arr;
