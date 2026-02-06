@@ -12,7 +12,7 @@ namespace enderman
 
     public:
         JsonBody(enderman_json::Object obj = enderman_json::Object()) : jsonobj(obj) {}
-        void parse_from(const std::vector<char> &body) override
+        void parse_from(const std::vector<char> &body)
         {
             std::string str(body.begin(), body.end());
             jsonobj = enderman_json::parse_json(str);
