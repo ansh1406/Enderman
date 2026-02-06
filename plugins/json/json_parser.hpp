@@ -14,7 +14,7 @@ namespace enderman
     auto json_parser = MiddlewareFunction(
         [](Request &req, Response &res, Next next)
         {
-            auto content_type_it = req.headers().find("Content-Type");
+            auto content_type_it = req.headers().find("content-type");
             if (content_type_it != req.headers().end() && content_type_it->second == "application/json")
             {
                 std::shared_ptr<JsonBody> json_body = std::make_shared<JsonBody>();
