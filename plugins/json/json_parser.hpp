@@ -18,7 +18,7 @@ namespace enderman
             if (content_type_it != req.headers().end() && content_type_it->second == "application/json")
             {
                 std::shared_ptr<JsonBody> json_body = std::make_shared<JsonBody>();
-                json_body->parse_from(req.get_body()->serialize());
+                json_body->parse_from(req.get_body()->as<RawBody>()->data);
                 req.set_body(json_body);
             }
             next(nullptr);
