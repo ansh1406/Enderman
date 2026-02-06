@@ -14,6 +14,7 @@
 #include <functional>
 #include <stdexcept>
 #include <memory>
+#include <iostream>
 
 enderman::HttpMethod get_enderman_method(const std::string &method_str)
 {
@@ -103,8 +104,15 @@ void enderman::http::HttpAdapter::create_server(unsigned short int port, Enderma
             handler(enderman_request, enderman_response);
             write_enderman_response_to_http_response(enderman_response, res);
         }
+        catch (std::exception &e)
+        {
+            std::cerr << e.what() << std::endl;
+            res.set_status_code(500);
+            res.set_status_message("Internal Server Error");
+        }
         catch (...)
         {
+            std::cerr << "Unknown error occurred while processing the request." << std::endl;
             res.set_status_code(500);
             res.set_status_message("Internal Server Error");
         }
