@@ -114,11 +114,21 @@ namespace enderman
         [](Request &req, Response &res, Next next)
         {
             auto content_type_it = req.headers().find("content-type");
-            if (content_type_it != req.headers().end() && content_type_it->second == "application/x-www-form-urlencoded")
+            if (content_type_it != req.headers().end())
             {
-                std::shared_ptr<UrlEncodedFormDataBody> formdata_body = std::make_shared<UrlEncodedFormDataBody>();
-                formdata_body->parse_from(req.get_body()->as<RawBody>()->data);
-                req.set_body(formdata_body);
+                std::string content_type = content_type_it->second;
+                content_type = content_type_it->second;
+                auto sem = content_type.find(';');
+                if (sem != std::string::npos)
+                    content_type = content_type.substr(0, sem);
+                for (auto &c : content_type)
+                    c = std::tolower(c);
+                if (content_type == "application/x-www-form-urlencoded")
+                {
+                    std::shared_ptr<UrlEncodedFormDataBody> formdata_body = std::make_shared<UrlEncodedFormDataBody>();
+                    formdata_body->parse_from(req.get_body()->as<RawBody>()->data);
+                    req.set_body(formdata_body);
+                }
             }
             next(nullptr);
         });

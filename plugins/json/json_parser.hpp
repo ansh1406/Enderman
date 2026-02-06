@@ -15,11 +15,21 @@ namespace enderman
         [](Request &req, Response &res, Next next)
         {
             auto content_type_it = req.headers().find("content-type");
-            if (content_type_it != req.headers().end() && content_type_it->second == "application/json")
+            if (content_type_it != req.headers().end())
             {
-                std::shared_ptr<JsonBody> json_body = std::make_shared<JsonBody>();
-                json_body->parse_from(req.get_body()->as<RawBody>()->data);
-                req.set_body(json_body);
+                std::string content_type = content_type_it->second;
+                content_type = content_type_it->second;
+                auto sem = content_type.find(';');
+                if (sem != std::string::npos)
+                    content_type = content_type.substr(0, sem);
+                for (auto &c : content_type)
+                    c = std::tolower(c);
+                if (content_type == "application/json")
+                {
+                    auto json_body = std::make_shared<JsonBody>();
+                    json_body->parse_from(req.get_body()->as<RawBody>()->data);
+                    req.set_body(json_body);
+                }
             }
             next(nullptr);
         });
