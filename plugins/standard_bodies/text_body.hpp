@@ -30,9 +30,9 @@ namespace enderman
     {
     public:
         std::string text;
-        std::string type;
+        std::string content_type;
 
-        TextBody(const std::string &type = "text/plain") : type(type) {}
+        TextBody(const std::string &content_type = "text/plain") : content_type(content_type) {}
 
         void parse_from(const std::vector<char> &body)
         {
@@ -44,10 +44,7 @@ namespace enderman
             return std::vector<char>(text.begin(), text.end());
         }
 
-        const std::string type() const override
-        {
-            return type;
-        }
+        const std::string type() const override { return content_type; }
     };
 
     MiddlewareFunction text_body_parser = MiddlewareFunction(
