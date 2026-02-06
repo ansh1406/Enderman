@@ -3,6 +3,9 @@
 
 #include "types.hpp"
 #include "constants.hpp"
+#include "request.hpp"
+#include "response.hpp"
+#include "body.hpp"
 
 #include <functional>
 #include <stdexcept>
