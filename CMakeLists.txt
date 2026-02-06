@@ -10,7 +10,7 @@ option(BUILD_MODULE_JSON "Build the json module and link it with enderman" ON)
 
 # Optionally build json module
 if(BUILD_MODULE_JSON)
-  if(EXISTS "${CMAKE_SOURCE_DIR}/modules/json/CMakeLists.txt")
+  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/modules/json/CMakeLists.txt")
     add_subdirectory(modules/json)
   else()
     message(FATAL_ERROR "modules/json/CMakeLists.txt not found but BUILD_MODULE_JSON=ON")
