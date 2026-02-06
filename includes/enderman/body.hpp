@@ -28,11 +28,9 @@ namespace enderman
 
     class RawBody : public Body
     {
-    private:
-        std::vector<char> data;
-        static constexpr const char *TYPE = "application/octet-stream";
-
     public:
+        static constexpr const char *TYPE = "application/octet-stream";
+        std::vector<char> data;
         RawBody() = default;
         ~RawBody() override = default;
         void parse_from(const std::vector<char> &body) override
@@ -45,7 +43,6 @@ namespace enderman
         }
         const std::string type() const override { return std::string(TYPE); }
     };
-
 }
 
 #endif // ENDERMAN_BODY_HPP
