@@ -16,20 +16,31 @@ namespace enderman
         virtual const std::string type() const = 0;
 
         template <typename T>
-        T *as() const
+        const T *as() const
         {
-            if (this->type() == T::TYPE)
+            auto casted = dynamic_cast<const T *>(this);
+            if (!casted)
             {
-                return static_cast<T *>(this);
+                throw std::bad_cast();
             }
-            throw std::bad_cast();
+            return casted;
+        }
+
+        template <typename T>
+        T *as()
+        {
+            auto casted = dynamic_cast<T *>(this);
+            if (!casted)
+            {
+                throw std::bad_cast();
+            }
+            return casted;
         }
     };
 
     class RawBody : public Body
     {
     public:
-        static constexpr const char *TYPE = "application/octet-stream";
         std::vector<char> data;
         RawBody() = default;
         ~RawBody() override = default;
@@ -41,7 +52,7 @@ namespace enderman
         {
             return data;
         }
-        const std::string type() const override { return std::string(TYPE); }
+        const std::string type() const override { return std::string("application/octet-stream"); }
     };
 }
 
