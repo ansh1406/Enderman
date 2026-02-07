@@ -49,10 +49,12 @@ namespace enderman
             static std::vector<std::string> parse_path(const std::string &path);
         };
 
-        class PathMatcher
+        class PathTools
         {
         public:
-            static bool match(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments);
+            static std::string build_path(const std::vector<std::string> &segments);
+            static std::vector<std::string> get_relative_path(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments);
+            static bool match_full_path(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments);
             static bool match_prefix(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments);
             static std::unordered_map<std::string, std::string> extract_path_params(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments);
         };

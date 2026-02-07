@@ -209,7 +209,25 @@ bool enderman::utils::UriParser::is_valid_query(const std::unordered_map<std::st
     return true;
 }
 
-bool enderman::utils::PathMatcher::match(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments)
+std::string enderman::utils::PathTools::build_path(const std::vector<std::string> &segments)
+{
+    std::string path;
+    for (const auto &segment : segments)
+    {
+        path += "/" + segment;
+    }
+    return path.empty() ? "/" : path;
+}
+
+std::vector<std::string> enderman::utils::PathTools::get_relative_path(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments)
+{
+    if (pattern_segments.size() > path_segments.size())
+        return {};
+
+    return std::vector<std::string>(path_segments.begin() + pattern_segments.size(), path_segments.end());
+}
+
+bool enderman::utils::PathTools::match_full_path(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments)
 {
     if (pattern_segments.size() != path_segments.size())
         return false;
@@ -231,7 +249,7 @@ bool enderman::utils::PathMatcher::match(const std::vector<std::string> &path_se
     return true;
 }
 
-bool enderman::utils::PathMatcher::match_prefix(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments)
+bool enderman::utils::PathTools::match_prefix(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments)
 {
     if (pattern_segments.size() > path_segments.size())
         return false;
@@ -252,7 +270,7 @@ bool enderman::utils::PathMatcher::match_prefix(const std::vector<std::string> &
     return true;
 }
 
-std::unordered_map<std::string, std::string> enderman::utils::PathMatcher::extract_path_params(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments)
+std::unordered_map<std::string, std::string> enderman::utils::PathTools::extract_path_params(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments)
 {
     std::unordered_map<std::string, std::string> params;
 
