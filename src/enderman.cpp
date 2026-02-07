@@ -221,6 +221,14 @@ void enderman::Enderman::Impl::run_middlewares(Request &req, Response &res)
 
         if (e)
         {
+            try
+            {
+                std::rethrow_exception(e);
+            }
+            catch (const std::exception &ex)
+            {
+                std::cerr << "Error received from middleware: " << ex.what() << std::endl;
+            }
             res.set_status(500).set_body(nullptr).send();
             return;
         }
@@ -245,22 +253,35 @@ void enderman::Enderman::Impl::run_middlewares(Request &req, Response &res)
 
 void enderman::Enderman::Impl::run_route_handler(Request &req, Response &res)
 {
-    auto it = route_handlers.find(req.method());
-    if (it != route_handlers.end())
+    try
     {
-        for (const auto &route_handler : it->second)
+        auto it = route_handlers.find(req.method());
+        if (it != route_handlers.end())
         {
-            if (enderman::utils::PathMatcher::match(req.path_segments(), route_handler.path))
+            for (const auto &route_handler : it->second)
             {
-                auto path_params = enderman::utils::PathMatcher::extract_path_params(req.path_segments(), route_handler.path);
-                for (const auto &pair : path_params)
+                if (enderman::utils::PathMatcher::match(req.path_segments(), route_handler.path))
                 {
-                    req.set_path_param(pair.first, pair.second);
+                    auto path_params = enderman::utils::PathMatcher::extract_path_params(req.path_segments(), route_handler.path);
+                    for (const auto &pair : path_params)
+                    {
+                        req.set_path_param(pair.first, pair.second);
+                    }
+                    route_handler.handler(req, res);
+                    return;
                 }
-                route_handler.handler(req, res);
-                return;
             }
         }
+        res.set_status(404).set_body(nullptr).send();
     }
-    res.set_status(404).set_body(nullptr).send();
+    catch (const std::exception &e)
+    {
+        std::cerr << "Error in route handler: " << e.what() << std::endl;
+        res.set_status(500).set_body(nullptr).send();
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown error in route handler" << std::endl;
+        res.set_status(500).set_body(nullptr).send();
+    }
 }
