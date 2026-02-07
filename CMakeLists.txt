@@ -54,7 +54,7 @@ endif()
 
 add_library(enderman STATIC ${ENDERMAN_SOURCES})
 target_include_directories(enderman PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/http/include")
-target_include_directories(enderman PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/includes")
+target_include_directories(enderman PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 set_target_properties(enderman PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_OUTPUT_DIR})
 
