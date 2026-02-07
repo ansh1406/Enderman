@@ -5,7 +5,6 @@
 #include "enderman/constants.hpp"
 
 #include "../response_writer.hpp"
-#include "../utils.hpp"
 
 #include "http_adapter.hpp"
 
@@ -14,7 +13,6 @@
 #include <functional>
 #include <stdexcept>
 #include <memory>
-#include <iostream>
 
 enderman::HttpMethod get_enderman_method(const std::string &method_str)
 {
@@ -39,12 +37,9 @@ enderman::HttpMethod get_enderman_method(const std::string &method_str)
 enderman::Request convert_http_request_to_enderman_request(const ::http::HttpRequest &http_request)
 {
     enderman::HttpMethod method = get_enderman_method(http_request.method);
-    auto parsed_uri = enderman::utils::UriParser::parse_uri(http_request.uri);
     enderman::Request enderman_request(method,
-                                       parsed_uri.path_segments,
-                                       parsed_uri.query_params,
-                                       std::unordered_map<std::string, std::string>(http_request.headers.begin(), http_request.headers.end()),
-                                       nullptr);
+                                       http_request.uri,
+                                       std::unordered_map<std::string, std::string>(http_request.headers.begin(), http_request.headers.end()));
     if (!http_request.body.empty())
     {
         std::shared_ptr<enderman::RawBody> body = std::make_shared<enderman::RawBody>();
@@ -104,15 +99,8 @@ void enderman::http::HttpAdapter::create_server(unsigned short int port, Enderma
             handler(enderman_request, enderman_response);
             write_enderman_response_to_http_response(enderman_response, res);
         }
-        catch (std::exception &e)
-        {
-            std::cerr << e.what() << std::endl;
-            res.set_status_code(500);
-            res.set_status_message("Internal Server Error");
-        }
         catch (...)
         {
-            std::cerr << "Unknown error occurred while processing the request." << std::endl;
             res.set_status_code(500);
             res.set_status_message("Internal Server Error");
         }
