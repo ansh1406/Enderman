@@ -85,14 +85,24 @@ namespace enderman
             {
                 return it->second;
             }
-            return "application/octet-stream";
+            return std::string("application/octet-stream");
         };
 
         return [get_mime_type, base_path](Request &req, Response &res, const Next &next)
         {
             try
             {
-                std::filesystem::path file_path = base_path / req.relative_path();
+                std::filesystem::path rel = req.relative_path();
+                if (rel.is_absolute())
+                    rel = rel.relative_path();
+                auto file_path = std::filesystem::weakly_canonical(base_path / rel);
+                auto canonical_base = std::filesystem::weakly_canonical(base_path);
+
+                if (file_path.string().rfind(canonical_base.string(), 0) != 0)
+                {
+                    next(nullptr);
+                    return;
+                }
 
                 if (std::filesystem::exists(file_path))
                 {
