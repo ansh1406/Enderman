@@ -186,13 +186,21 @@ void enderman::Enderman::listen(const unsigned short port)
     {
         EndermanCallbackFunction handler = [this](Request &req, Response &res)
         {
-            pImpl->build_request(req);
-            pImpl->run_middlewares(req, res);
-            if (res.is_sent())
+            try
             {
-                return;
+                pImpl->build_request(req);
+                pImpl->run_middlewares(req, res);
+                if (res.is_sent())
+                {
+                    return;
+                }
+                pImpl->run_route_handler(req, res);
             }
-            pImpl->run_route_handler(req, res);
+            catch (std::exception &e)
+            {
+                std::cerr << "Error processing request: " << e.what() << std::endl;
+                res.set_status(500).set_body(nullptr).send();
+            }
         };
         http_adapter.create_server(port, handler);
     }
