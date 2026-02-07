@@ -9,6 +9,7 @@
 #include "utils.hpp"
 #include "middleware.hpp"
 #include "route_handler.hpp"
+#include "request_builder.hpp"
 
 #include <functional>
 #include <stdexcept>
@@ -26,6 +27,7 @@ namespace enderman
 
         void run_middlewares(Request &req, Response &res);
         void run_route_handler(Request &req, Response &res);
+        void build_request(Request &req);
     };
 }
 
@@ -184,6 +186,7 @@ void enderman::Enderman::listen(const unsigned short port)
     {
         EndermanCallbackFunction handler = [this](Request &req, Response &res)
         {
+            pImpl->build_request(req);
             pImpl->run_middlewares(req, res);
             if (res.is_sent())
             {
@@ -207,6 +210,14 @@ void enderman::Enderman::listen(const unsigned short port)
         std::cerr << e.what() << std::endl;
         return;
     }
+}
+
+void enderman::Enderman::Impl::build_request(Request &req)
+{
+    auto parsed_uri = enderman::utils::UriParser::parse_uri(req.raw_uri());
+    RequestBuilder::set_base_path_segments(req, parsed_uri.path_segments);
+    RequestBuilder::set_base_path(req, enderman::utils::PathTools::build_path(parsed_uri.path_segments));
+    RequestBuilder::set_query_params(req, parsed_uri.query_params);
 }
 
 void enderman::Enderman::Impl::run_middlewares(Request &req, Response &res)
@@ -236,13 +247,12 @@ void enderman::Enderman::Impl::run_middlewares(Request &req, Response &res)
         while (index < middlewares.size())
         {
             Middleware &mw = middlewares[index++];
-            if (enderman::utils::PathMatcher::match_prefix(req.path_segments(), mw.path))
+            if (enderman::utils::PathTools::match_prefix(req.base_path_segments(), mw.path))
             {
-                auto path_params = enderman::utils::PathMatcher::extract_path_params(req.path_segments(), mw.path);
-                for (const auto &pair : path_params)
-                {
-                    req.set_path_param(pair.first, pair.second);
-                }
+                auto path_params = enderman::utils::PathTools::extract_path_params(req.base_path_segments(), mw.path);
+                RequestBuilder::set_path_params(req, path_params);
+                RequestBuilder::set_relative_path_segments(req, enderman::utils::PathTools::get_relative_path(req.base_path_segments(), mw.path));
+                RequestBuilder::set_relative_path(req, enderman::utils::PathTools::build_path(req.relative_path_segments()));
                 mw.func(req, res, next);
                 return;
             }
@@ -260,13 +270,12 @@ void enderman::Enderman::Impl::run_route_handler(Request &req, Response &res)
         {
             for (const auto &route_handler : it->second)
             {
-                if (enderman::utils::PathMatcher::match(req.path_segments(), route_handler.path))
+                if (enderman::utils::PathTools::match_full_path(req.base_path_segments(), route_handler.path))
                 {
-                    auto path_params = enderman::utils::PathMatcher::extract_path_params(req.path_segments(), route_handler.path);
-                    for (const auto &pair : path_params)
-                    {
-                        req.set_path_param(pair.first, pair.second);
-                    }
+                    auto path_params = enderman::utils::PathTools::extract_path_params(req.base_path_segments(), route_handler.path);
+                    RequestBuilder::set_path_params(req, path_params);
+                    RequestBuilder::set_relative_path_segments(req, enderman::utils::PathTools::get_relative_path(req.base_path_segments(), route_handler.path));
+                    RequestBuilder::set_relative_path(req, enderman::utils::PathTools::build_path(req.relative_path_segments()));
                     route_handler.handler(req, res);
                     return;
                 }
