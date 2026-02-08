@@ -1,3 +1,6 @@
+/// @file constants.hpp
+/// @brief Defines constants and enumerations used in the Enderman library.
+
 #ifndef ENDERMAN_CONSTANTS_HPP
 #define ENDERMAN_CONSTANTS_HPP
 

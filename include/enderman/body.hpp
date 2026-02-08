@@ -1,3 +1,7 @@
+/// @file body.hpp
+/// @brief Defines the abstract Body class and a concrete RawBody class for handling message bodies in the Enderman library.
+/// @brief You may make your own Body class by inheriting from Body and implementing the serialize() and type() methods.
+
 #ifndef ENDERMAN_BODY_HPP
 #define ENDERMAN_BODY_HPP
 
