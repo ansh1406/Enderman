@@ -1,3 +1,6 @@
+/// @file binary_body.hpp
+/// @brief Derived class for binary type bodies.
+
 #pragma once
 
 #include "enderman/body.hpp"
@@ -9,6 +12,7 @@
 
 namespace enderman
 {
+    /// @brief BinaryBody class that inherits from Body and represents binary request or response bodies.
     class BinaryBody : public Body
     {
     public:

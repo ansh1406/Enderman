@@ -1,3 +1,6 @@
+///  @file formdata_body.hpp
+///  @brief Derived class for URL-encoded form data type bodies and middleware to parse them.
+
 #pragma once
 
 #include "enderman/request.hpp"
@@ -14,6 +17,7 @@
 
 namespace enderman
 {
+    /// @brief Class representing a URL-encoded form data body in a request or response.
     class UrlEncodedFormDataBody : public Body
     {
     public:
@@ -110,6 +114,7 @@ namespace enderman
         }
     };
 
+    /// @brief Middleware function to parse URL-encoded form data request bodies. It checks the Content-Type header of the request and if it is "application/x-www-form-urlencoded", it parses the body as a UrlEncodedFormDataBody and replaces the original RawBody with the parsed UrlEncodedFormDataBody in the request.
     MiddlewareFunction url_encoded_formdata_parser = MiddlewareFunction(
         [](Request &req, Response &res, Next next)
         {

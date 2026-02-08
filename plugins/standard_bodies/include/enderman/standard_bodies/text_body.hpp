@@ -1,3 +1,6 @@
+/// @file text_body.hpp
+/// @brief Derived class for text type bodies and middleware to parse them.
+
 #pragma once
 
 #include "enderman/request.hpp"
@@ -12,6 +15,7 @@
 
 namespace enderman
 {
+    /// @brief Types supported by the TextBody parser. This is not an exhaustive list, but it covers common text types. You can add more types to this set as needed.
     std::unordered_set<std::string> text_types = {
         "text/plain",
         "text/html",
@@ -26,6 +30,7 @@ namespace enderman
         "application/json",
     };
 
+    /// @brief TextBody class that inherits from Body and represents text-based request bodies.
     class TextBody : public Body
     {
     public:
@@ -47,6 +52,7 @@ namespace enderman
         const std::string type() const override { return content_type; }
     };
 
+    /// @brief Middleware function to parse text-based request bodies. It checks the Content-Type header of the request and if it matches one of the supported text types, it parses the body as a TextBody and replaces the original RawBody with the parsed TextBody in the request.
     MiddlewareFunction text_body_parser = MiddlewareFunction(
         [](Request &req, Response &res, Next next)
         {
@@ -70,6 +76,7 @@ namespace enderman
             next(nullptr);
         });
 
+    /// @brief Middleware function to force parsing of request bodies as TextBody regardless of the Content-Type header. This can be useful in cases where the client does not set the Content-Type header correctly or when you want to treat all request bodies as text for a specific route or group of routes.
     MiddlewareFunction text_body_parser_forced_parsing = MiddlewareFunction(
         [](Request &req, Response &res, Next next)
         {
