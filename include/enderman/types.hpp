@@ -11,9 +11,8 @@ namespace enderman
     class Body;
 
     using Next = std::function<void(std::exception_ptr)>;
-    using MiddlewareFunction = std::function<void(class Request &, class Response &, const Next &)>;
-    using RouteHandlerFunction = std::function<void(class Request &, class Response &)>;
-    using EndermanCallbackFunction = std::function<void(class Request &, class Response &)>;
+    using MiddlewareFunction = std::function<void(Request &, Response &, const Next &)>;
+    using RouteHandlerFunction = std::function<void(Request &, Response &)>;
 }
 
 #endif // ENDERMAN_TYPES_HPP
