@@ -1,9 +1,13 @@
+/// @file json_body.hpp
+/// @brief Derived class for JSON type bodies.
+
 #pragma once
 #include "json_core.hpp"
 #include "enderman/body.hpp"
 
 namespace enderman
 {
+    /// @brief JsonBody class that inherits from Body and represents JSON request or response bodies.
     class JsonBody : public enderman::Body
     {
     public:

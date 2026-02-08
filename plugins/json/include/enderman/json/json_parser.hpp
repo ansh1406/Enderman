@@ -1,3 +1,6 @@
+/// @file json_parser.hpp
+/// @brief Middleware function to parse JSON request bodies.
+
 #include "enderman/request.hpp"
 #include "enderman/response.hpp"
 #include "enderman/types.hpp"
@@ -11,6 +14,7 @@
 
 namespace enderman
 {
+    /// @brief Middleware function to parse JSON request bodies. It checks the Content-Type header of the request and if it matches "application/json", it parses the body as a JsonBody and replaces the original RawBody with the parsed JsonBody in the request.
     auto json_parser = MiddlewareFunction(
         [](Request &req, Response &res, Next next)
         {
