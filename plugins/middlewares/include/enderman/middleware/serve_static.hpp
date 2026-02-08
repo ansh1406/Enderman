@@ -1,3 +1,6 @@
+//// @file serve_static.hpp
+/// @brief Middleware function to serve static files from a specified directory in Enderman.
+
 #pragma once
 
 #include "enderman/body.hpp"
@@ -72,6 +75,12 @@ namespace
 
 namespace enderman
 {
+    /// @brief Middleware function generator to serve static files from a specified directory in Enderman.
+    /// It takes a base path as an argument and returns a MiddlewareFunction that can be used in the Enderman middleware stack to serve static files for incoming requests.
+    /// The middleware checks if the requested file exists within the specified base path and serves it with the appropriate MIME type if it does.
+    /// If the requested file is a directory, it looks for an index.html file within that directory to serve.
+    /// @param base_path The base path from which to serve static files.
+    /// @return MiddlewareFunction that can be used in the Enderman middleware stack to serve static files from the specified base path.
     MiddlewareFunction serve_static(const std::filesystem::path &base_path)
     {
 

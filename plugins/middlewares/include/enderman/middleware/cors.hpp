@@ -1,3 +1,6 @@
+/// @file cors.hpp
+/// @brief Middleware function to handle Cross-Origin Resource Sharing (CORS) in Enderman.
+
 #pragma once
 
 #include "enderman/types.hpp"
@@ -29,6 +32,11 @@ namespace
 
 namespace enderman
 {
+    /// @brief Configuration struct for CORS middleware.
+    /// @param allowed_origins List of allowed origins. If empty, all origins are allowed.
+    /// @param allowed_methods List of allowed HTTP methods. If empty, all methods are allowed
+    /// @param allowed_headers List of allowed HTTP headers. If empty, all headers are allowed.
+    /// @param allow_credentials Whether to allow credentials (cookies, authorization headers, etc.). False by default.
     struct CorsConfig
     {
         std::vector<std::string> allowed_origins;
@@ -36,6 +44,11 @@ namespace enderman
         std::vector<std::string> allowed_headers;
         bool allow_credentials = false;
     };
+
+    /// @brief Middleware function generator to handle Cross-Origin Resource Sharing (CORS) in Enderman.
+    /// It takes a CorsConfig struct as an argument and returns a MiddlewareFunction that can be used in the Enderman middleware stack to handle CORS for incoming requests.
+    /// @param config Configuration for CORS handling, including allowed origins, methods, headers, and whether to allow credentials.
+    /// @return MiddlewareFunction that can be used in the Enderman middleware stack to handle CORS for incoming requests based on the provided configuration.
     MiddlewareFunction cors(const CorsConfig &config = CorsConfig{})
     {
         return [config](Request &req, Response &res, const Next &next)
