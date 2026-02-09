@@ -25,8 +25,19 @@ namespace enderman
         std::vector<Middleware> middlewares;
         std::unordered_map<enderman::HttpMethod, std::vector<RouteHandler>> route_handlers;
 
+        /// @brief Run middlewares in order for the given request and response.
+        /// Middlewares are run in the order they were registered.
+        /// A Middleware will run if the registered path for the middleware is prefix of request's base paths.
+        /// @param req Request object to be processed by middlewares.
+        /// @param res Response object to be processed by middlewares.
         void run_middlewares(Request &req, Response &res);
+        /// @brief Run the route handler for the given request and response.
+        /// The route handler will run only and only if the registered path for the route handler is an exact match to the request's base path and the registered HTTP method for the route handler matches the request's HTTP method.
+        /// @param req Request object to be processed by the route handler.
+        /// @param res Response object to be processed by the route handler.
         void run_route_handler(Request &req, Response &res);
+        /// @brief Set the base path, base path segments, and query parameters for the given request object.
+        /// @param req Request object to be built.
         void build_request(Request &req);
     };
 }
