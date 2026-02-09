@@ -34,7 +34,7 @@ To install Enderman, you can clone the repository and build it using CMake. Here
 
 1. Clone the repository:
    ```bash
-   git clone
+   git clone --recurse-submodules https://github.com/ansh1406/Enderman.git
    ```
 2. Navigate to the project directory:
    ```bash
@@ -82,7 +82,37 @@ Here is a brief overview of the JSON module:
 
 ## Usage
 
-To use Enderman in your C++ project, you need to include the Enderman header files and link against the Enderman library. Here is a simple example of how to create a basic web application using Enderman:
+### Header files
+
+- Core enderman header files are located in the [`include/enderman`](include/enderman) directory.
+- You only need to include the `enderman.hpp` header files it is designed as a single include.
+- For using plugins you need to include the header files of the plugin. They are located in the `include/enderman` directory of each plugin's respective directory.
+
+### Library
+
+- The Enderman library `libenderman.a` is located in the `build` directory after building the project.
+- If you want to use a module you can select the optional build for that module in the top level CMakeLists.txt file it will built `libenderman.a` with the module support.
+- If you have built the project without the support of a specific module, you can still use that module by building it separately and linking against it in your project.
+- Some plugins may depend on specific modules or other plugins.
+
+### Building your project
+
+- Build enderman as a static library.
+- Add the path to the Enderman header files to your project's include path. For example, if you have cloned the Enderman repository to `/path/to/Enderman`, you would add `/path/to/Enderman/include` to your include path. This would create a nice way to include the header files in your project, for example:
+  ```cpp
+  #include <enderman/enderman.hpp>
+  ```
+- For each plugin you want to use add the plugins include folder to your include path. For example, if you want to use the standard_bodies plugin, you would add `/path/to/Enderman/plugins/standard_bodies/include` to your include path. Then in your source code you can include the header file of the plugin, like this:
+  ```cpp
+  #include <enderman/standard_bodies/standard_bodies.hpp>
+  ```
+- While compiling/building your project, link against the Enderman library. For example, if you are using g++, you would add `-L/path/to/Enderman/build -lenderman` to your compiler flags to link against the Enderman library.
+
+- You may also need to link against module specific libraries if you had built enderman without the support of that module.
+
+- Some plugins may also depend on specific modules or other plugins. Like `json` plugin depends on `json` module so you need to link against the `json` module library if you want to use the `json` plugin. Or build enderman with `BUIILD_MODULE_JSON` option enabled.
+
+### Example Program
 
 ```cpp
 #include <enderman/enderman.hpp>
@@ -105,4 +135,10 @@ int main() {
 }
 ```
 
-> This will create a web server which listens on port 3000 and responds with "Hello, World!" when a GET request is made to the "/hello" route.
+You can build this program like this:
+
+```bash
+g++ -I/path/to/Enderman/include -L/path/to/Enderman/build -lenderman -o my_app my_app.cpp
+```
+
+This will create a web server which listens on port 3000 and responds with "Hello, World!" when a GET request is made to the "/hello" route.
