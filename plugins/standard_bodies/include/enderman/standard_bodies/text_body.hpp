@@ -50,6 +50,43 @@ namespace enderman
         }
 
         const std::string type() const override { return content_type; }
+
+        /// @brief Creates a new TextBody with the given text (text/plain) and sets it as the body of the response.
+        /// @param res The response object to set the body on.
+        /// @param text The text content to set in the body.
+        /// @return The response object with the new body set.
+        static Response &set_text(Response &res, const std::string &text)
+        {
+            std::shared_ptr<TextBody> body = std::make_shared<TextBody>("text/plain");
+            body->text = text;
+            res.set_body(body);
+            return res;
+        }
+
+        /// @brief Creates a new TextBody with the given HTML content (text/html) and sets it as the body of the response.
+        /// @param res The response object to set the body on.
+        /// @param html The HTML content to set in the body.
+        /// @return The response object with the new body set.
+        static Response &set_html(Response &res, const std::string &html)
+        {
+            std::shared_ptr<TextBody> body = std::make_shared<TextBody>("text/html");
+            body->text = html;
+            res.set_body(body);
+            return res;
+        }
+
+        /// @brief Creates a new TextBody with the given text and content type, sets it as the body of the response.
+        /// @param res The response object to set the body on.
+        /// @param text The text content to set in the body.
+        /// @param content_type The content type of the text.
+        /// @return The response object with the new body set.
+        static Response &set_text_as(Response &res, const std::string &text, const std::string &content_type)
+        {
+            std::shared_ptr<TextBody> body = std::make_shared<TextBody>(content_type);
+            body->text = text;
+            res.set_body(body);
+            return res;
+        }
     };
 
     /// @brief Middleware function to parse text-based request bodies. It checks the Content-Type header of the request and if it matches one of the supported text types, it parses the body as a TextBody and replaces the original RawBody with the parsed TextBody in the request.
