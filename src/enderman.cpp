@@ -196,6 +196,11 @@ void enderman::Enderman::listen(const unsigned short port)
                 }
                 pImpl->run_route_handler(req, res);
             }
+            catch (const enderman::utils::UriParser::InvalidURIException &e)
+            {
+                std::cerr << "Invalid URI: " << e.what() << std::endl;
+                res.set_status(400).set_body(nullptr).send();
+            }
             catch (std::exception &e)
             {
                 std::cerr << "Error processing request: " << e.what() << std::endl;
@@ -222,10 +227,21 @@ void enderman::Enderman::listen(const unsigned short port)
 
 void enderman::Enderman::Impl::build_request(Request &req)
 {
-    auto parsed_uri = enderman::utils::UriParser::parse_uri(req.raw_uri());
-    RequestBuilder::set_base_path_segments(req, parsed_uri.path_segments);
-    RequestBuilder::set_base_path(req, enderman::utils::PathTools::build_path(parsed_uri.path_segments));
-    RequestBuilder::set_query_params(req, parsed_uri.query_params);
+    try
+    {
+        auto parsed_uri = enderman::utils::UriParser::parse_uri(req.raw_uri());
+        RequestBuilder::set_base_path_segments(req, parsed_uri.path_segments);
+        RequestBuilder::set_base_path(req, enderman::utils::PathTools::build_path(parsed_uri.path_segments));
+        RequestBuilder::set_query_params(req, parsed_uri.query_params);
+    }
+    catch (const enderman::utils::UriParser::InvalidURIException &e)
+    {
+        throw;
+    }
+    catch (const std::exception &e)
+    {
+        throw std::runtime_error("Failed to build request: " + std::string(e.what()));
+    }
 }
 
 void enderman::Enderman::Impl::run_middlewares(Request &req, Response &res)
