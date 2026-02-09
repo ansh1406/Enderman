@@ -1,3 +1,9 @@
+/*
+    Enderman Json - A simple JSON library for C++ based on nlohmann/json.
+    This projects is created for Enderman framework to handle JSON data in requests and responses.
+    Despite that, this is completely independent of Enderman and can be used in any C++ project.
+*/
+
 /// @file json.hpp
 /// @brief Header file for the Enderman Json library. This file defines the Object class which represents a JSON value.
 
