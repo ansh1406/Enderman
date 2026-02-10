@@ -58,7 +58,7 @@ To install Enderman, you can clone the repository and build it using CMake. Here
 
 ### Enderman
 
-The API documentation is yet to be written but inline comments in the public hearest explain the functions in detail.
+The API documentation is yet to be written but inline comments in the public headers explain the functions in detail.
 Here is a brief overview-
 
 - `Enderman`: The main class of the framework, which is used to create an instance of the application and define routes and middleware.
@@ -70,7 +70,7 @@ Here is a brief overview-
 
 ### Json module
 
-The JSON module is created to provide support for handling JSON data in Enderman. But it is completely independent of enderman can can be used in any C++ project. It provides a simple and intuitive API for parsing and generating JSON data.
+The JSON module is created to provide support for handling JSON data in Enderman, but it is completely independent of enderman and can be used in any C++ project. It provides a simple and intuitive API for parsing and generating JSON data.
 
 Here is a brief overview of the JSON module:
 
