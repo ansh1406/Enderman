@@ -69,7 +69,7 @@ namespace enderman
             /// @param path_segments Vector of original path segments
             /// @param pattern_segments Vector of pattern segments.
             /// @return Vector of path segments relative to the pattern.
-            /// @warning This function does not check if the pattern matches the path. 
+            /// @warning This function does not check if the pattern matches the path.
             /// It's the caller's responsibility to ensure that the pattern matches the path before calling this function.
             static std::vector<std::string> get_relative_path(const std::vector<std::string> &path_segments, const std::vector<std::string> &pattern_segments);
             /// @brief Match the given path with a pattern.

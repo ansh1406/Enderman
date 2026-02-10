@@ -15,9 +15,7 @@ namespace enderman
         std::vector<std::string> path;
         RouteHandlerFunction handler;
         explicit RouteHandler(const std::vector<std::string> _path, RouteHandlerFunction f)
-            : path(std::move(_path)), handler(std::move(f))
-        {
-        }
+            : path(std::move(_path)), handler(std::move(f)) {}
     };
 }
 

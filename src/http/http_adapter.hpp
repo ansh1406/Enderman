@@ -11,7 +11,7 @@
 namespace enderman
 {
     using EndermanCallbackFunction = std::function<void(Request &, Response &)>;
-    
+
     namespace http
     {
         class HttpAdapter
