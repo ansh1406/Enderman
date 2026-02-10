@@ -42,7 +42,7 @@ namespace enderman
         /// @param res The response object to set the body on.
         /// @param obj The JSON object to set in the body.
         /// @return Reference to the response object with the new body set.
-        static Response &set_json(Response &res, enderman_json::Object &obj)
+        static Response &set_json(Response &res, enderman_json::Object obj)
         {
             auto body = std::make_shared<JsonBody>(obj);
             res.set_body(body);
