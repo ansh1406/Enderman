@@ -24,7 +24,7 @@ enderman::utils::UriParser::ParsedURI enderman::utils::UriParser::parse_uri(cons
 
         for (auto &pair : query_params)
         {
-            decoded_query_params[decode_url_encoding(pair.first), decode_url_encoding(pair.second)];
+            decoded_query_params[decode_url_encoding(pair.first)] =  decode_url_encoding(pair.second);
         }
 
         if (!is_valid_path(normalized_segments))

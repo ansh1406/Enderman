@@ -18,6 +18,11 @@ namespace enderman
     class Request
     {
     private:
+        /// @brief IP of the client in x.x.x.x format (Request sender)
+        std::string _ip;
+        /// @brief Port of client from which client has sent the request
+        std::string _port;
+
         /// @brief HTTP method of the request (GET, POST, etc.).
         HttpMethod _method;
 
@@ -44,18 +49,29 @@ namespace enderman
 
     public:
         /// @brief Constructor for Request class.
+        /// @param ip IP address of the client in x.x.x.x format.
+        /// @param port Port number from which the client has sent the request.
         /// @param method HTTP method of the request as an HttpMethod enum value.
         /// @param raw_uri Raw URI of the request as received from the client, including path and query string. Still URL encoded.
         /// @param headers Headers of the request. Normalize header names to lowercase before passing to this constructor.
-        Request(const HttpMethod method,
+        Request(const std::string &ip,
+                const std::string &port,
+                const HttpMethod method,
                 const std::string &raw_uri,
                 const std::unordered_map<std::string, std::string> &headers)
-            : _method(method),
+            : _ip(ip),
+              _port(port),
+              _method(method),
               _headers(headers),
               _raw_uri(raw_uri) {}
 
         ~Request() = default;
-
+        /// @brief Get the IP address of the client
+        /// @return IP address of the client in x.x.x.x format as std::string
+        const std::string &ip() const { return _ip; }
+        /// @brief Get the Port from which the client has sent the request
+        /// @return Port number as std::string
+        const std::string &port() const { return _port; }
         /// @brief Get the HTTP method of the request.
         /// @return HTTP method as an HttpMethod enum value.
         HttpMethod method() const { return _method; }

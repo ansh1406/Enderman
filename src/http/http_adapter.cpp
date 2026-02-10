@@ -36,14 +36,16 @@ enderman::HttpMethod get_enderman_method(const std::string &method_str)
 
 enderman::Request convert_http_request_to_enderman_request(const ::http::HttpRequest &http_request)
 {
-    enderman::HttpMethod method = get_enderman_method(http_request.method);
-    enderman::Request enderman_request(method,
-                                       http_request.uri,
-                                       std::unordered_map<std::string, std::string>(http_request.headers.begin(), http_request.headers.end()));
-    if (!http_request.body.empty())
+    enderman::HttpMethod method = get_enderman_method(http_request.method());
+    enderman::Request enderman_request(http_request.ip(),
+                                       http_request.port(),
+                                       method,
+                                       http_request.uri(),
+                                       std::unordered_map<std::string, std::string>(http_request.headers().begin(), http_request.headers().end()));
+    if (!http_request.body().empty())
     {
         std::shared_ptr<enderman::RawBody> body = std::make_shared<enderman::RawBody>();
-        body->parse_from(http_request.body);
+        body->parse_from(http_request.body());
         enderman_request.set_body(body);
     }
     return enderman_request;
