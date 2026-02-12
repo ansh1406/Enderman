@@ -1,0 +1,23 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout repository
+      uses: actions/checkout@v4
+      with: 
+        submodules: recursive 
+        fetch-depth: 0
+    - name: configure
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+    - name: build
+      run: cmake --build build --config Release
