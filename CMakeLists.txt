@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Optionally build modules
-option(BUILD_MODULE_JSON "Build the json module and link it with enderman" ON)
+option(BUILD_MODULE_JSON "Build the json module and link it with enderman" OFF)
 
 find_package(http 4.2.3 EXACT REQUIRED)
 
@@ -23,7 +23,7 @@ target_include_directories(enderman
   $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(enderman PRIVATE http)
+target_link_libraries(enderman PUBLIC http::http)
 
 
 # Optionally build json module
@@ -54,11 +54,18 @@ endif()
 include(GNUInstallDirs)
 
 install(TARGETS enderman
+  EXPORT endermanTargets
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(DIRECTORY ${ENDERMAN_INCLUDE_DIR}/
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(EXPORT endermanTargets
+  FILE endermanTargets.cmake
+  NAMESPACE enderman::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/enderman
 )
 
 include(CMakePackageConfigHelpers)
