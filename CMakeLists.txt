@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Optionally build modules
 option(BUILD_MODULE_JSON "Build the json module and link it with enderman" ON)
 
-find_package(http REQUIRED)
+find_package(http 4.2.3 EXACT REQUIRED)
 
 set(ENDERMAN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 file(GLOB_RECURSE ENDERMAN_SOURCES
