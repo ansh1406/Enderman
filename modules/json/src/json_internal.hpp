@@ -2,7 +2,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "json/json.hpp"
+#include "enderman_json/json.hpp"
 
 namespace enderman_json
 {
