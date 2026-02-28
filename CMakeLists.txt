@@ -12,7 +12,7 @@ find_package(http 4.2.3 EXACT REQUIRED)
 
 option(ENDERMAN_PLUGIN_STANDARD_BODIES "Enable standard bodies plugin" ON)
 option(ENDERMAN_PLUGIN_MIDDLEWARES "Enable middlewares plugin" ON)
-option(ENDERMAN_PLUGIN_JSON "Enable JSON plugin" ON)
+option(ENDERMAN_PLUGIN_JSON "Enable JSON plugin" OFF)
 
 set(ENDERMAN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 file(GLOB_RECURSE ENDERMAN_SOURCES
