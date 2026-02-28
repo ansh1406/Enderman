@@ -2,15 +2,16 @@
 
 ## Overview
 
-Enderman is a web application framework built on top of my own HTTP server library ([Http-Server](https://github.com/ansh1406/Http-Server)). It provides a higher-level abstraction for building web applications, making it easier to handle routing, middleware, and other common web development tasks. Enderman is designed to be lightweight and efficient, allowing developers to create fast and responsive web applications with ease.
+Enderman is a web application framework built on top of my HTTP server library ([Http-Server](https://github.com/ansh1406/Http-Server)). It provides a higher-level abstraction for building web applications, making it easier to handle routing, middleware, and other common web development tasks. Enderman is lightweight and efficient, allowing developers to create fast and responsive web applications.
 
-Enderman is designed to be modular and extensible, allowing developers to easily add new features and functionality as needed. It provides a simple and intuitive API for handling HTTP requests and responses, making it easy to build complex web applications.
+Enderman is modular and extensible, so you can add features and functionality as needed. It provides a simple and intuitive API for handling HTTP requests and responses, which makes building complex web applications easier.
 
-This is a completely educational project for myself. I wanted to try this and than so I decided to build Enderman but despite that I've still tried my best to make it as good as possible. I hope you find it useful and enjoy using it as much as I enjoyed building it. And yes Enderman is highly inspired by Express.js so you'll see many similar function names. (But I can't be sure if they are implemented similarly but still most of them behave the same). So if I do some unintetional bragging in the following part, please ignore it. I'm trying to imitate other libraries.
+This project is educational. I decided to build Enderman to explore web frameworks in C++. I tried to make it as good as possible and hope you find it useful. Enderman is heavily inspired by Express.js, so you may see similar function names and behavior. If anything below sounds like bragging, please ignore it — I'm learning and experimenting.
 
-> [WARNING] Enderman uses my own http server library which is only desinged for POSIX complient linux system thus making Enderman only compatible with linux system.
+> [WARNING]
+> Enderman depends on my HTTP server library, which is designed for POSIX-compliant Linux systems; therefore, Enderman is only supported on Linux.
 
-On the final note, If you're also a student or a new developer who is looking for easy to start projects in C++ and are interested in contributing in this or my http library project, please contact me at [anshswaroop14@gmail.com](mailto:anshswaroop14@gmail.com). We can discuss further. I'm highly optimistic about this project.
+On a final note, if you're a student or new developer looking for an easy C++ project and are interested in contributing to this project or my HTTP library, please contact me at [anshswaroop14@gmail.com](mailto:anshswaroop14@gmail.com). I'm happy to discuss contributions.
 
 ## Features
 
@@ -18,65 +19,77 @@ On the final note, If you're also a student or a new developer who is looking fo
 
 - **Middleware**: Enderman supports middleware functions that can be used to modify the request and response objects before they are handled by the route handlers. This allows you to add functionality such as authentication, logging, and more.
 
-- **Simplistic**: Enderman is designed to be simple and easy to use. But still being in C++ there are some parts that are a bit less intuitive.
+- **Simplicity**: Enderman is designed to be simple and easy to use. Because it's written in C++, some parts may be less intuitive compared to higher-level languages.
 
-- **Extensible**: Enderman is designed to be extensible, allowing you to easily add new features and functionality as needed. You can create your own middleware functions, route handlers, and more.
+- **Extensible**: Enderman is extensible, allowing you to add custom middleware, route handlers, and more.
 
-- **Json Support**: Enderman provides built-in support for handling JSON data, making it easy to work with APIs and other data formats.
+- **JSON Support**: Enderman provides built-in support for handling JSON data, making it easy to work with APIs and other data formats.
 
-- **Performance**: Enderman works directly on the OS unlike many other web frameworks which are built on top of other languages or runtimes, thus making it faster and more efficient.
+- **Performance**: Enderman works close to the OS level, unlike many frameworks built on other runtimes, which can make it faster and more efficient.
 
 ## Installation
+> [WARNING]
+> Enderman is only compatible with Linux.
 
-> [WARNING] Enderman will only compatible with linux system.
+Prerequisites
+- A POSIX-compliant Linux system
+- A C++ compiler and CMake (e.g., `g++` and `cmake`)
+- The `http` library (Http-Server) installed and discoverable by CMake
 
-To install Enderman, you can clone the repository and build it using CMake. Here are the steps to get started:
+Install the `http` dependency first following its README. Then build and install Enderman:
 
-1. Clone the repository:
-   ```bash
-   git clone --recurse-submodules https://github.com/ansh1406/Enderman.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd Enderman
-   ```
-3. Create a build directory and navigate to it:
-   ```bash
-   mkdir build
-   cd build
-   ```
-4. Build the project using CMake:
-   ```bash
-   cmake ..
-   make
-   ```
-5. After the build process is complete, you can find the Enderman library in the `build/lib` directory. You can link this library in your C++ projects to use Enderman.
+From the project root:
 
-6. In the top level CMakeLists.txt file, you can select optional build for modules.
+```bash
+git clone https://github.com/ansh1406/Enderman.git
+cd Enderman
+mkdir build && cd build
+# Optionally enable plugins at configure time: -DENDERMAN_PLUGIN_JSON=ON
+cmake ..
+make
+sudo make install
+```
+
+Notes
+- To enable optional modules at configure time, pass CMake definitions such as `-DENDERMAN_PLUGIN_JSON=ON` when running `cmake ..`, or enable modules in the top-level `CMakeLists.txt` (search for options named `ENDERMAN*`).
+- For a Release build, run: `cmake -DCMAKE_BUILD_TYPE=Release ..`
+
+If you want to build with JSON plugin build and install the JSON module first.
+
+- To build the JSON module:
+
+```bash
+cd modules/json
+mkdir build && cd build
+cmake ..
+make
+sudo make install
+```
+
+After installing a module (for example the JSON module), re-run CMake for the main project with the corresponding `-D` option (for example `-DENDERMAN_PLUGIN_JSON=ON`) and rebuild Enderman so the main library picks up the installed module.
 
 ## API Documentation
 
 ### Enderman
 
-The API documentation is yet to be written but inline comments in the public headers explain the functions in detail.
-Here is a brief overview-
+The API documentation is yet to be written, but inline comments in the public headers explain the functions in detail. Here is a brief overview:
 
-- `Enderman`: The main class of the framework, which is used to create an instance of the application and define routes and middleware.
-- `Request`: Represents an Enderman request, containing information such as the request method, URL, headers, and body.
-- `Response`: Represents an Enderman response, allowing you to set the status code, headers, and body of the response.
-- `Body`: Abstract factory class for creating different types of response bodies (e.g., text, JSON, etc.). You can create your own custom body types by inheriting from this class.
+- `Enderman`: The main class of the framework, used to create an application instance and define routes and middleware.
+- `Request`: Represents a request, containing the method, URL, headers, and body.
+- `Response`: Represents a response, allowing you to set the status code, headers, and body.
+- `Body`: Abstract factory class for creating different response body types (e.g., text, JSON). You can create custom body types by inheriting from this class.
 
 > All classes and functions are declared in the `enderman` namespace.
 
-### Json module
+### JSON module
 
-The JSON module is created to provide support for handling JSON data in Enderman, but it is completely independent of enderman and can be used in any C++ project. It provides a simple and intuitive API for parsing and generating JSON data.
+The JSON module provides support for handling JSON data in Enderman, but it is independent and can be used in any C++ project. It provides a simple API for parsing and generating JSON data.
 
 Here is a brief overview of the JSON module:
 
-- `Object`: Class representing a JSON object, which can be a primitive, an array or a nested object.
-- `parse_json`: Function to parse a JSON string and return an `Object` representing the JSON data.
-- `stringify`: Function to convert an `Object` representing JSON data into a C++ std::string.
+- `Object`: Class representing a JSON value (primitive, array, or object).
+- `parse_json`: Parses a JSON string and returns an `Object` representing the data.
+- `stringify`: Converts an `Object` representing JSON data into an `std::string`.
 
 > All classes and functions in the JSON module are declared in the `enderman_json` namespace.
 
@@ -84,33 +97,34 @@ Here is a brief overview of the JSON module:
 
 ### Header files
 
-- Core enderman header files are located in the [`include/enderman`](include/enderman) directory.
-- You only need to include the `enderman.hpp` header files it is designed as a single include.
-- For using plugins you need to include the header files of the plugin. They are located in the `include/enderman` directory of each plugin's respective directory.
+- Core Enderman headers are located in the [`include/enderman`](include/enderman) directory.
+- You only need to include `enderman.hpp`; it is designed as a single-header include.
+- To use plugins, include the plugin headers in their respective `include/enderman` directories.
 
 ### Library
 
-- The Enderman library `libenderman.a` is located in the `build` directory after building the project.
-- If you want to use a module you can select the optional build for that module in the top level CMakeLists.txt file it will built `libenderman.a` with the module support.
-- If you have built the project without the support of a specific module, you can still use that module by building it separately and linking against it in your project.
+- The Enderman static library `libenderman.a` is located in the `build` directory after building the project.
+- To include a module in the build, enable the optional module build in the top-level `CMakeLists.txt`; the resulting `libenderman.a` will include the module support.
+- If you build Enderman without a specific module, you can still build that module separately and link against it in your project.
 - Some plugins may depend on specific modules or other plugins.
 
 ### Building your project
 
-- Build enderman as a static library.
-- Add the path to the Enderman header files to your project's include path. For example, if you have cloned the Enderman repository to `/path/to/Enderman`, you would add `/path/to/Enderman/include` to your include path. This would create a nice way to include the header files in your project, for example:
-  ```cpp
-  #include <enderman/enderman.hpp>
-  ```
-- For each plugin you want to use add the plugins include folder to your include path. For example, if you want to use the standard_bodies plugin, you would add `/path/to/Enderman/plugins/standard_bodies/include` to your include path. Then in your source code you can include the header file of the plugin, like this:
-  ```cpp
-  #include <enderman/standard_bodies/standard_bodies.hpp>
-  ```
-- While compiling/building your project, link against the Enderman library. For example, if you are using g++, you would add `-L/path/to/Enderman/build -lenderman` to your compiler flags to link against the Enderman library.
+- Ensure Enderman is built and installed at your desired path. By default, it installs system-wide using the OS default paths.
 
-- You may also need to link against module specific libraries if you had built enderman without the support of that module.
+- Then you can use CMake to build your project by linking against the Enderman library with:
 
-- Some plugins may also depend on specific modules or other plugins. Like `json` plugin depends on `json` module so you need to link against the `json` module library if you want to use the `json` plugin. Or build enderman with `BUIILD_MODULE_JSON` option enabled.
+```cmake
+find_package(enderman REQUIRED)
+target_link_libraries(your_target PRIVATE enderman::enderman)
+```
+
+- Alternatively you can build directly using `g++`:
+```bash
+g++ your_file.cpp -lenderman -lhttp -o your_file
+```
+
+To use this, both Enderman and the `http` library must be installed on the system, or you must provide the library and include paths using `-L` and `-I`.
 
 ### Example Program
 
@@ -124,9 +138,7 @@ int main() {
     Enderman app;
 
     app.get("/hello", [](Request& req, Response& res) {
-        auto response_body = std::make_shared<TextBody>(TextBody());
-        response_body->text = "Hello, World!";
-        res.set_body(response_body).send();
+        TextBody::set_text(res, "Hello, World!").send();
     });
 
     app.listen(3000);
@@ -135,10 +147,11 @@ int main() {
 }
 ```
 
-You can build this program like this:
+You can build this program with CMake by adding these lines to your `CMakeLists.txt`:
 
-```bash
-g++ -I/path/to/Enderman/include -L/path/to/Enderman/build -lenderman -o my_app my_app.cpp
+```cmake
+find_package(enderman REQUIRED)
+target_link_libraries(your_target PRIVATE enderman::enderman)
 ```
 
-This will create a web server which listens on port 3000 and responds with "Hello, World!" when a GET request is made to the "/hello" route.
+This will create a web server that listens on port 3000 and responds with "Hello, World!" when a GET request is made to the "/hello" route.
