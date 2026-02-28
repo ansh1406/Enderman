@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(json_module LANGUAGES CXX)
+project(enderman_json LANGUAGES CXX)
 
 file(GLOB JSON_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 set(JSON_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
@@ -20,14 +20,14 @@ set_target_properties(enderman_json PROPERTIES
 include(GNUInstallDirs)
 
 install(TARGETS enderman_json
-    EXPORT endermanJsonTargets
+    EXPORT enderman_jsonTargets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-install(EXPORT endermanJsonTargets
-	FILE endermanJsonConfig.cmake
+install(EXPORT enderman_jsonTargets
+	FILE enderman_jsonConfig.cmake
 	NAMESPACE enderman_json::
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/enderman_json
 )
@@ -35,19 +35,19 @@ install(EXPORT endermanJsonTargets
 include(CMakePackageConfigHelpers)
 
 write_basic_package_version_file(
-	"${CMAKE_CURRENT_BINARY_DIR}/endermanJsonConfigVersion.cmake"
+	"${CMAKE_CURRENT_BINARY_DIR}/enderman_jsonConfigVersion.cmake"
 	VERSION 1.0.0
 	COMPATIBILITY AnyNewerVersion
 )
 
 configure_package_config_file(
-	"${CMAKE_CURRENT_SOURCE_DIR}/cmake/endermanJsonConfig.cmake.in"
-	"${CMAKE_CURRENT_BINARY_DIR}/endermanJsonConfig.cmake"
+	"${CMAKE_CURRENT_SOURCE_DIR}/cmake/enderman_jsonConfig.cmake.in"
+	"${CMAKE_CURRENT_BINARY_DIR}/enderman_jsonConfig.cmake"
 	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/enderman_json	
 )
 
 install(FILES
-	"${CMAKE_CURRENT_BINARY_DIR}/endermanJsonConfig.cmake"
-	"${CMAKE_CURRENT_BINARY_DIR}/endermanJsonConfigVersion.cmake"
+	"${CMAKE_CURRENT_BINARY_DIR}/enderman_jsonConfig.cmake"
+	"${CMAKE_CURRENT_BINARY_DIR}/enderman_jsonConfigVersion.cmake"
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/enderman_json
 )
