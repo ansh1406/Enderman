@@ -5,6 +5,9 @@ project(enderman-project LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
 find_package(http 4.2.3 EXACT REQUIRED)
 
 option(ENDERMAN_PLUGIN_STANDARD_BODIES "Enable standard bodies plugin" ON)
@@ -38,8 +41,6 @@ endif()
 
 
 
-include(GNUInstallDirs)
-
 install(TARGETS enderman
   EXPORT endermanTargets
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -55,7 +56,6 @@ install(EXPORT endermanTargets
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/enderman
 )
 
-include(CMakePackageConfigHelpers)
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/endermanConfigVersion.cmake"
