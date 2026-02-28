@@ -3,6 +3,6 @@
 
 #pragma once
 
-#include "json_core.hpp"
+#include <enderman_json/json.hpp>
 #include "json_body.hpp"
 #include "json_parser.hpp"

@@ -2,7 +2,7 @@
 /// @brief Derived class for JSON type bodies.
 
 #pragma once
-#include "json_core.hpp"
+#include <enderman_json/json.hpp>
 #include "enderman/body.hpp"
 #include "enderman/request.hpp"
 #include "enderman/response.hpp"

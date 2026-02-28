@@ -5,7 +5,7 @@
 #include "enderman/response.hpp"
 #include "enderman/types.hpp"
 
-#include "json_core.hpp"
+#include <enderman_json/json.hpp>
 #include "json_body.hpp"
 
 #include <functional>
