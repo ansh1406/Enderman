@@ -8,25 +8,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Optionally build modules
 option(BUILD_MODULE_JSON "Build the json module and link it with enderman" ON)
 
-
-# First build the http component (expects http/CMakeLists.txt)
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/http/CMakeLists.txt")
-  add_subdirectory(http)
-else()
-  message(FATAL_ERROR "http/CMakeLists.txt not found. Ensure the http folder is present.")
-endif()
-
-if(NOT TARGET http)
-  message(FATAL_ERROR "http target not found. Ensure the http component is built correctly.")
-endif()
-
+find_package(http REQUIRED)
 
 set(ENDERMAN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
-set(HTTP_LIB_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/http/include")
 file(GLOB_RECURSE ENDERMAN_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
 )
-
 
 add_library(enderman STATIC ${ENDERMAN_SOURCES})
 
@@ -35,8 +22,6 @@ target_include_directories(enderman
   $<BUILD_INTERFACE:${ENDERMAN_INCLUDE_DIR}>
   $<INSTALL_INTERFACE:include>
 )
-
-target_include_directories(enderman PRIVATE ${HTTP_LIB_INCLUDE_DIR})
 
 target_link_libraries(enderman PRIVATE http)
 
@@ -69,7 +54,6 @@ endif()
 include(GNUInstallDirs)
 
 install(TARGETS enderman
-  EXPORT endermanTargets
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
@@ -77,18 +61,12 @@ install(DIRECTORY ${ENDERMAN_INCLUDE_DIR}/
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-install(EXPORT endermanTargets
-  FILE endermanTargets.cmake
-  NAMESPACE enderman::
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/enderman
-)
-
 include(CMakePackageConfigHelpers)
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/endermanConfigVersion.cmake"
   VERSION 1.0.0
-  COMPATIBILITY AnyNewerVersion
+  COMPATIBILITY SameMinorVersion
 )
 
 configure_package_config_file(
