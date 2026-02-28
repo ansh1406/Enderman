@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(http 4.2.3 EXACT REQUIRED)
 
+option(ENDERMAN_PLUGIN_STANDARD_BODIES "Enable standard bodies plugin" ON)
+
 set(ENDERMAN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 file(GLOB_RECURSE ENDERMAN_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
@@ -21,6 +23,14 @@ target_include_directories(enderman
 )
 
 target_link_libraries(enderman PUBLIC http::http)
+
+
+if(ENDERMAN_PLUGIN_STANDARD_BODIES)
+  add_subdirectory(plugins/standard_bodies)
+  target_link_libraries(enderman PUBLIC enderman_standard_bodies)
+endif()
+
+
 
 include(GNUInstallDirs)
 
