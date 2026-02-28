@@ -64,3 +64,41 @@ if(BUILD_MODULE_JSON)
     message(FATAL_ERROR "modules/json/CMakeLists.txt not found but BUILD_MODULE_JSON=ON")
   endif()
 endif()
+
+
+include(GNUInstallDirs)
+
+install(TARGETS enderman
+  EXPORT endermanTargets
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(DIRECTORY ${ENDERMAN_INCLUDE_DIR}/
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(EXPORT endermanTargets
+  FILE endermanTargets.cmake
+  NAMESPACE enderman::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/enderman
+)
+
+include(CMakePackageConfigHelpers)
+
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/endermanConfigVersion.cmake"
+  VERSION 1.0.0
+  COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/endermanConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/endermanConfig.cmake"
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/enderman
+)
+
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/endermanConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/endermanConfigVersion.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/enderman
+)
