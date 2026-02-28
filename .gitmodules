@@ -1,4 +1,0 @@
-[submodule "http"]
-	path = http
-	url = https://github.com/ansh1406/Http-Server
-	branch = main

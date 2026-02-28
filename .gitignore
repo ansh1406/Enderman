@@ -1,6 +1,7 @@
 .vscode/
 build/
 test/
+install/
 *.a
 *.o
 *.so
