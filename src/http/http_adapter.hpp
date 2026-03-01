@@ -1,7 +1,5 @@
 #pragma once
 
-#include "http/http.hpp"
-
 #include "enderman/types.hpp"
 
 #include <string>
