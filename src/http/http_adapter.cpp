@@ -1,3 +1,5 @@
+#include <http/http.hpp>
+
 #include "enderman/types.hpp"
 #include "enderman/request.hpp"
 #include "enderman/response.hpp"
