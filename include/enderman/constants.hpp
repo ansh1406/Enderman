@@ -6,6 +6,7 @@
 
 namespace enderman
 {
+    /// @brief Enumeration of supported HTTP methods.
     enum class HttpMethod
     {
         GET,
