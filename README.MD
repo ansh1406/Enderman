@@ -8,7 +8,7 @@ Enderman is modular and extensible, so you can add features and functionality as
 
 This project is educational. I decided to build Enderman to explore web frameworks in C++. I tried to make it as good as possible and hope you find it useful. Enderman is heavily inspired by Express.js, so you may see similar function names and behavior. If anything below sounds like bragging, please ignore it — I'm learning and experimenting.
 
-> [WARNING]
+> [!WARNING]
 > Enderman depends on my HTTP server library, which is designed for POSIX-compliant Linux systems; therefore, Enderman is only supported on Linux.
 
 On a final note, if you're a student or new developer looking for an easy C++ project and are interested in contributing to this project or my HTTP library, please contact me at [anshswaroop14@gmail.com](mailto:anshswaroop14@gmail.com). I'm happy to discuss contributions.
@@ -28,13 +28,13 @@ On a final note, if you're a student or new developer looking for an easy C++ pr
 - **Performance**: Enderman works close to the OS level, unlike many frameworks built on other runtimes, which can make it faster and more efficient.
 
 ## Installation
-> [WARNING]
+> [!WARNING]
 > Enderman is only compatible with Linux.
 
 Prerequisites
 - A POSIX-compliant Linux system
 - A C++ compiler and CMake (e.g., `g++` and `cmake`)
-- The `http` library (Http-Server) installed and discoverable by CMake
+- The `http` library [Http-Server](https://github.com/ansh1406/Http-Server) installed and discoverable by CMake
 
 Install the `http` dependency first following its README. Then build and install Enderman:
 
