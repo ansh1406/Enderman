@@ -6,24 +6,57 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: cpp-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUILD_TYPE: Release
+  DEPS_INSTALL_PREFIX: ${{ github.workspace }}/.deps
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - name: checkout repository
+    - name: Checkout repository
       uses: actions/checkout@v4
-    - name: install dependencies
-      run: |
-        sudo apt-get update && sudo apt-get install -y build-essential cmake
-        git clone https://github.com/ansh1406/Http-Server.git && cd Http-Server
-        mkdir build && cd build && cmake .. && make && sudo make install && cd ../..
 
-    - name: build json module
-      run: cd modules/json && mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release && make && sudo make install && cd ../..
-      
-    - name: configure
-      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DENDERMAN_PLUGIN_JSON=ON
-    - name: build
-      run: cmake --build build --config Release
+    - name: Install system packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ninja-build
+
+    - name: Build and install Http-Server dependency
+      run: |
+        git clone --depth 1 https://github.com/ansh1406/Http-Server.git
+        cmake -S Http-Server -B Http-Server/build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+          -DCMAKE_INSTALL_PREFIX=${DEPS_INSTALL_PREFIX}
+        cmake --build Http-Server/build --parallel
+        cmake --install Http-Server/build
+
+    - name: Build and install json module
+      run: |
+        cmake -S modules/json -B modules/json/build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+          -DCMAKE_PREFIX_PATH=${DEPS_INSTALL_PREFIX} \
+          -DCMAKE_INSTALL_PREFIX=${DEPS_INSTALL_PREFIX}
+        cmake --build modules/json/build --parallel
+        cmake --install modules/json/build
+
+    - name: Configure Enderman
+      run: |
+        cmake -S . -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+          -DCMAKE_PREFIX_PATH=${DEPS_INSTALL_PREFIX} \
+          -DENDERMAN_PLUGIN_JSON=ON
+
+    - name: Build Enderman
+      run: cmake --build build --parallel
+
+    - name: Run tests
+      run: ctest --test-dir build --build-config ${BUILD_TYPE} --output-on-failure
