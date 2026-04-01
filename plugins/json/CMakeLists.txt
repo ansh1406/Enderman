@@ -1,3 +1,6 @@
+include(GNUInstallDirs)
+
+
 add_library(enderman_json_plugin INTERFACE)
 add_library(enderman::json ALIAS enderman_json_plugin)
 

@@ -1,5 +1,8 @@
+include(GNUInstallDirs)
+
 add_library(enderman_standard_bodies INTERFACE)
 add_library(enderman::standard_bodies ALIAS enderman_standard_bodies)
+
 target_include_directories(enderman_standard_bodies
     INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

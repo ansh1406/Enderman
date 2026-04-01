@@ -1,7 +1,7 @@
 @PACKAGE_INIT@
 
 include(CMakeFindDependencyMacro)
-find_dependency(http 4.2.3 REQUIRED)
+find_dependency(http 4.3.0 EXACT REQUIRED)
 
 if(@ENDERMAN_PLUGIN_JSON@)
   find_dependency(enderman_json REQUIRED)

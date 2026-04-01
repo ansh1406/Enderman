@@ -8,7 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-find_package(http 4.2.3 EXACT REQUIRED)
+# set(http_DIR "path to parent directory of httpConfig.cmake") # Uncomment and set the path if http package is not found automatically
+find_package(http 4.3.0 EXACT REQUIRED)
 
 option(ENDERMAN_PLUGIN_STANDARD_BODIES "Enable standard bodies plugin" ON)
 option(ENDERMAN_PLUGIN_MIDDLEWARES "Enable middlewares plugin" ON)
@@ -65,7 +66,7 @@ install(EXPORT endermanTargets
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/endermanConfigVersion.cmake"
-  VERSION 1.0.0
+  VERSION 1.1.0
   COMPATIBILITY SameMinorVersion
 )
 
