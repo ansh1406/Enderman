@@ -87,12 +87,12 @@ enderman::http::HttpAdapter::~HttpAdapter()
 
 void enderman::http::HttpAdapter::create_server(unsigned short int port, EndermanCallbackFunction &handler)
 {
-    ::http::HttpServerConfig config{
-        .port = port,
-        .max_pending_connections = 128,
-        .max_concurrent_connections = 128,
-        .inactive_connection_timeout_in_seconds = 60,
-        .enable_logging = false};
+    ::http::HttpServerConfig config;
+    config.port = port;
+    config.max_pending_connections = 128;
+    config.max_concurrent_connections = 128;
+    config.inactive_connection_timeout_in_seconds = 60;
+    config.enable_logging = false;
 
     auto http_handler = [handler](const ::http::HttpRequest &req, ::http::HttpResponse &res)
     {
