@@ -19,44 +19,63 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    defaults:
+      run:
+        shell: bash
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install system packages
+    - name: Install Linux packages
+      if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake ninja-build
+        sudo apt-get install -y build-essential cmake
+
+    - name: Set CMake options
+      run: |
+        if [ "${{ runner.os }}" = "Windows" ]; then
+          echo "CMAKE_CONFIGURE_EXTRA=" >> "$GITHUB_ENV"
+        else
+          echo "CMAKE_CONFIGURE_EXTRA=-DCMAKE_BUILD_TYPE=${BUILD_TYPE}" >> "$GITHUB_ENV"
+        fi
 
     - name: Build and install Http-Server dependency
       run: |
         git clone --depth 1 https://github.com/ansh1406/Http-Server.git
-        cmake -S Http-Server -B Http-Server/build -G Ninja \
-          -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+        cmake -S Http-Server -B Http-Server/build \
+          ${CMAKE_CONFIGURE_EXTRA} \
           -DCMAKE_INSTALL_PREFIX=${DEPS_INSTALL_PREFIX}
-        cmake --build Http-Server/build --parallel
-        cmake --install Http-Server/build
+        cmake --build Http-Server/build --config ${BUILD_TYPE} --parallel
+        cmake --install Http-Server/build --config ${BUILD_TYPE}
 
     - name: Build and install json module
       run: |
-        cmake -S modules/json -B modules/json/build -G Ninja \
-          -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+        cmake -S modules/json -B modules/json/build \
+          ${CMAKE_CONFIGURE_EXTRA} \
           -DCMAKE_PREFIX_PATH=${DEPS_INSTALL_PREFIX} \
           -DCMAKE_INSTALL_PREFIX=${DEPS_INSTALL_PREFIX}
-        cmake --build modules/json/build --parallel
-        cmake --install modules/json/build
+        cmake --build modules/json/build --config ${BUILD_TYPE} --parallel
+        cmake --install modules/json/build --config ${BUILD_TYPE}
 
     - name: Configure Enderman
       run: |
-        cmake -S . -B build -G Ninja \
-          -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+        cmake -S . -B build \
+          ${CMAKE_CONFIGURE_EXTRA} \
           -DCMAKE_PREFIX_PATH=${DEPS_INSTALL_PREFIX} \
           -DENDERMAN_PLUGIN_JSON=ON
 
     - name: Build Enderman
-      run: cmake --build build --parallel
+      run: cmake --build build --config ${BUILD_TYPE} --parallel
 
     - name: Run tests
       run: ctest --test-dir build --build-config ${BUILD_TYPE} --output-on-failure
