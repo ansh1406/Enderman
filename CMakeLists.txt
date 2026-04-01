@@ -66,7 +66,7 @@ install(EXPORT endermanTargets
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/endermanConfigVersion.cmake"
-  VERSION 1.1.0
+  VERSION 1.2.0
   COMPATIBILITY SameMinorVersion
 )
 
